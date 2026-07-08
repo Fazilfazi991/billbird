@@ -8,14 +8,14 @@ const columns = {
 
 export function Footer() {
   return (
-    <footer className="bg-black py-14 text-ivory">
+    <footer className="bg-black py-10 text-ivory md:py-14">
       <div className="section-shell">
         <div className="flex flex-col justify-between gap-8 border-b border-ivory/12 pb-10 md:flex-row">
           <div>
             <img
               src="/billbird-logo-transparent-large.webp"
               alt="BillBirD"
-              className="h-20 w-auto"
+              className="h-14 w-auto md:h-20"
             />
             <p className="mt-3 max-w-sm text-sm leading-7 text-ivory/58">{brand.tagline}</p>
           </div>

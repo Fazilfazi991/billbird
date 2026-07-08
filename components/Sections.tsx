@@ -52,10 +52,10 @@ export function Hero() {
 
 export function IntroStatement() {
   return (
-    <section id="intro" className="bg-ivory py-20 text-center">
+    <section id="intro" className="bg-ivory py-14 text-center md:py-20">
       <div className="section-shell max-w-4xl">
         <p className="eyebrow mb-4">Handmade Modern Luxury</p>
-        <h2 className="display-title text-4xl md:text-6xl">
+        <h2 className="display-title text-3xl leading-tight md:text-6xl">
           BillBirD is a modern eyewear brand redefining optical fashion for a new generation.
         </h2>
         <p className="mx-auto mt-5 max-w-2xl leading-7 text-charcoal/70">
@@ -68,12 +68,12 @@ export function IntroStatement() {
 
 export function CollectionCards() {
   return (
-    <section id="collection" className="bg-bone py-20">
+    <section id="collection" className="bg-bone py-14 md:py-20">
       <div className="section-shell">
         <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
             <p className="eyebrow mb-3">Collection</p>
-            <h2 className="display-title text-5xl">Featured Frames</h2>
+            <h2 className="display-title text-4xl md:text-5xl">Featured Frames</h2>
           </div>
           <p className="max-w-md text-sm leading-7 text-charcoal/68">
             Premium optical styling, sunglasses-inspired silhouettes, and personalized accessories.
@@ -88,8 +88,8 @@ export function CollectionCards() {
                 className="aspect-[4/5]"
                 imageClassName="group-hover:scale-105"
               />
-              <div className="p-6">
-                <h3 className="font-serif text-3xl">{item.title}</h3>
+              <div className="p-5 md:p-6">
+                <h3 className="font-serif text-2xl md:text-3xl">{item.title}</h3>
                 <p className="mt-3 min-h-14 text-sm leading-6 text-charcoal/68">{item.description}</p>
                 <a href={brand.whatsapp} className="mt-5 inline-flex items-center gap-2 text-[0.7rem] font-extrabold uppercase tracking-[0.14em]">
                   Explore <ArrowUpRight size={15} />
@@ -105,7 +105,7 @@ export function CollectionCards() {
 
 export function AboutSection() {
   return (
-    <section id="about" className="bg-ivory py-20">
+    <section id="about" className="bg-ivory py-14 md:py-20">
       <div className="section-shell grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <BrandImage
           src={imagePath(2)}
@@ -113,10 +113,10 @@ export function AboutSection() {
           className="aspect-[5/4]"
           imageClassName="object-[62%_center]"
         />
-        <div className="bg-ivory/86 p-8 shadow-soft md:p-12">
+        <div className="bg-ivory/86 p-6 shadow-soft md:p-12">
           <p className="eyebrow mb-4">About BillBirD</p>
-          <h2 className="display-title text-5xl">Created for confidence and individuality.</h2>
-          <p className="mt-6 leading-8 text-charcoal/72">
+          <h2 className="display-title text-4xl leading-tight md:text-5xl">Created for confidence and individuality.</h2>
+          <p className="mt-5 leading-7 text-charcoal/72 md:mt-6 md:leading-8">
             BillBirD creates stylish, comfortable, premium-quality spectacles that combine
             contemporary design with everyday functionality. Each frame is shaped around
             high-quality acetate materials, comfort, durability, and a timeless finish.
@@ -129,7 +129,7 @@ export function AboutSection() {
 
 export function VisionMissionSection() {
   return (
-    <section className="bg-charcoal py-14 text-ivory">
+    <section className="bg-charcoal py-10 text-ivory md:py-14">
       <div className="section-shell grid gap-4 lg:grid-cols-2">
         {[
           ["Vision", "At BillBirD, our vision is to become a globally recognized leader in luxury eyewear, setting new standards through exceptional craftsmanship, innovative design, and uncompromising quality."],
@@ -143,7 +143,7 @@ export function VisionMissionSection() {
             />
             <div className="border-t border-ink/10 p-5 md:p-6">
               <p className="eyebrow mb-2 text-[0.64rem]">{title}</p>
-              <p className="max-w-md font-serif text-xl leading-[1.34] md:text-2xl">{body}</p>
+              <p className="max-w-md font-serif text-lg leading-[1.36] md:text-2xl">{body}</p>
             </div>
           </article>
         ))}
@@ -154,11 +154,11 @@ export function VisionMissionSection() {
 
 export function WhyChooseUs() {
   return (
-    <section className="bg-ivory py-20">
+    <section className="bg-ivory py-14 md:py-20">
       <div className="section-shell">
         <p className="eyebrow mb-3 text-center">Why Choose Us</p>
-        <h2 className="display-title text-center text-5xl">Why Choose BillBirD?</h2>
-        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <h2 className="display-title text-center text-4xl md:text-5xl">Why Choose BillBirD?</h2>
+        <div className="mt-8 grid gap-4 md:mt-10 md:grid-cols-2 lg:grid-cols-4">
           {benefits.map((item) => (
             <article key={item.title} className="border border-ink/10 bg-bone/45 p-6">
               <h3 className="font-serif text-2xl">{item.title}</h3>
@@ -177,14 +177,14 @@ export function SignatureSection() {
       <BrandImage
         src={imagePath(3)}
         alt="Close-up of BillBirD amber luxury eyewear"
-        className="min-h-[520px]"
+        className="min-h-[340px] md:min-h-[520px]"
         imageClassName="object-[58%_center]"
       />
-      <div className="flex items-center p-8 md:p-14 lg:p-20">
+      <div className="flex items-center p-6 md:p-14 lg:p-20">
         <div>
           <p className="eyebrow mb-4 text-gold">Signature Luxury Appearance</p>
-          <h2 className="display-title text-5xl">A bold statement of modern luxury.</h2>
-          <p className="mt-6 leading-8 text-ivory/72">
+          <h2 className="display-title text-4xl leading-tight md:text-5xl">A bold statement of modern luxury.</h2>
+          <p className="mt-5 leading-7 text-ivory/72 md:mt-6 md:leading-8">
             Every BillBirD frame is created to deliver a bold statement of style, confidence,
             and modern luxury.
           </p>
@@ -201,12 +201,12 @@ export function SignatureSection() {
 
 export function CustomizationSection() {
   return (
-    <section id="customization" className="bg-bone py-20">
+    <section id="customization" className="bg-bone py-14 md:py-20">
       <div className="section-shell grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
           <p className="eyebrow mb-4">Bespoke Fit</p>
-          <h2 className="display-title text-5xl">Make your own pair with bespoke fit.</h2>
-          <p className="mt-6 leading-8 text-charcoal/72">
+          <h2 className="display-title text-4xl leading-tight md:text-5xl">Make your own pair with bespoke fit.</h2>
+          <p className="mt-5 leading-7 text-charcoal/72 md:mt-6 md:leading-8">
             Personalize your eyewear case with names, numbers, personal photos, artwork,
             patterns, and unique luxury-inspired details.
           </p>
@@ -224,11 +224,11 @@ export function CustomizationSection() {
 
 export function ProductGrid() {
   return (
-    <section className="bg-ivory py-20">
+    <section className="bg-ivory py-14 md:py-20">
       <div className="section-shell">
         <p className="eyebrow mb-3 text-center">Product Showcase</p>
-        <h2 className="display-title text-center text-5xl">The Atelier Selection</h2>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 className="display-title text-center text-4xl md:text-5xl">The Atelier Selection</h2>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 md:mt-10 lg:grid-cols-3">
           {products.map(([name, category], index) => (
             <article key={name} className="group bg-bone/45 p-3">
               <BrandImage
@@ -252,11 +252,11 @@ export function ProductGrid() {
 
 export function PhilosophySection() {
   return (
-    <section className="bg-bone py-20">
+    <section className="bg-bone py-14 md:py-20">
       <div className="section-shell">
         <p className="eyebrow mb-3 text-center">Our Philosophy</p>
-        <h2 className="display-title text-center text-5xl">Style with substance.</h2>
-        <div className="mt-10 grid gap-4 md:grid-cols-4">
+        <h2 className="display-title text-center text-4xl md:text-5xl">Style with substance.</h2>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 md:mt-10 lg:grid-cols-4">
           {philosophy.map(([title, body], index) => (
             <article key={title} className="bg-ivory">
               <BrandImage
@@ -278,7 +278,7 @@ export function PhilosophySection() {
 
 export function CraftsmanshipSection() {
   return (
-    <section className="bg-ivory py-20">
+    <section className="bg-ivory py-14 md:py-20">
       <div className="section-shell grid gap-4 md:grid-cols-3">
         {["Designed for Modern Luxury", "Crafted with Precision", "Made for Individuality"].map((title) => (
           <article key={title} className="border-t border-ink/15 pt-6">
@@ -296,7 +296,7 @@ export function CraftsmanshipSection() {
 
 export function ContactSection() {
   return (
-    <section id="contact" className="relative overflow-hidden bg-ink py-24 text-ivory">
+    <section id="contact" className="relative overflow-hidden bg-ink py-16 text-ivory md:py-24">
       <BrandImage
         src={imagePath(5)}
         alt="BillBirD eyewear and luxury case"
@@ -305,7 +305,7 @@ export function ContactSection() {
       />
       <div className="section-shell relative max-w-4xl text-center">
         <p className="eyebrow mb-4 text-gold">Contact BillBirD</p>
-        <h2 className="display-title text-5xl md:text-6xl">Begin your eyewear conversation.</h2>
+        <h2 className="display-title text-4xl md:text-6xl">Begin your eyewear conversation.</h2>
         <div className="mx-auto mt-8 grid max-w-2xl gap-3 text-sm text-ivory/78 sm:grid-cols-2">
           <p>Phone / WhatsApp: {brand.phone}</p>
           <p>Website: {brand.website}</p>

@@ -21,12 +21,12 @@ export function Navbar() {
         scrolled ? "bg-ivory/94 text-ink shadow-sm backdrop-blur" : "text-ivory"
       }`}
     >
-      <nav className="section-shell flex h-20 items-center justify-between gap-5">
+      <nav className="section-shell flex h-16 items-center justify-between gap-4 md:h-20 md:gap-5">
         <a href="#home" className="flex items-center gap-3" aria-label="BillBirD home">
           <img
             src="/billbird-logo-transparent.webp"
             alt="BillBirD"
-            className="h-12 w-auto"
+            className="h-9 w-auto md:h-12"
           />
         </a>
 
@@ -49,7 +49,7 @@ export function Navbar() {
         </div>
 
         <button
-          className="grid size-11 place-items-center rounded-full border border-current/25 lg:hidden"
+          className="grid size-10 place-items-center rounded-full border border-current/25 lg:hidden"
           onClick={() => setOpen(true)}
           aria-label="Open menu"
         >

@@ -36,7 +36,7 @@ input {
 
 .section-shell {
   margin-inline: auto;
-  width: min(1180px, calc(100% - 32px));
+  width: min(1180px, calc(100% - 28px));
 }
 
 .eyebrow {
@@ -120,7 +120,7 @@ input {
 
 .scroll-reveal {
   opacity: 0;
-  transform: translateY(34px);
+  transform: translateY(24px);
   transition:
     opacity 760ms ease,
     transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -128,11 +128,29 @@ input {
 }
 
 .scroll-reveal.from-up {
-  transform: translateY(-34px);
+  transform: translateY(-24px);
 }
 
 .scroll-reveal.from-down {
-  transform: translateY(34px);
+  transform: translateY(24px);
+}
+
+@media (min-width: 768px) {
+  .section-shell {
+    width: min(1180px, calc(100% - 32px));
+  }
+
+  .scroll-reveal {
+    transform: translateY(34px);
+  }
+
+  .scroll-reveal.from-up {
+    transform: translateY(-34px);
+  }
+
+  .scroll-reveal.from-down {
+    transform: translateY(34px);
+  }
 }
 
 .scroll-reveal.is-visible {
