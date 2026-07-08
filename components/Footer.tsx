@@ -13,9 +13,9 @@ export function Footer() {
         <div className="flex flex-col justify-between gap-8 border-b border-ivory/12 pb-10 md:flex-row">
           <div>
             <img
-              src="/billbird-logo-wordmark.webp"
+              src="/billbird-logo-transparent-large.webp"
               alt="BillBirD"
-              className="h-16 w-auto rounded-sm"
+              className="h-20 w-auto"
             />
             <p className="mt-3 max-w-sm text-sm leading-7 text-ivory/58">{brand.tagline}</p>
           </div>

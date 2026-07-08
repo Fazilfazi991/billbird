@@ -24,9 +24,9 @@ export function Navbar() {
       <nav className="section-shell flex h-20 items-center justify-between gap-5">
         <a href="#home" className="flex items-center gap-3" aria-label="BillBirD home">
           <img
-            src="/billbird-logo-wordmark.webp"
+            src="/billbird-logo-transparent.webp"
             alt="BillBirD"
-            className="h-12 w-auto rounded-sm"
+            className="h-12 w-auto"
           />
         </a>
 
