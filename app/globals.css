@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-sans: Inter, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+  background: #f7f2ea;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #f7f2ea;
+  color: #050505;
+  font-family: var(--font-sans), Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.section-shell {
+  margin-inline: auto;
+  width: min(1180px, calc(100% - 32px));
+}
+
+.eyebrow {
+  color: #7a4a34;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.display-title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-dark {
+  align-items: center;
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 800;
+  gap: 0.45rem;
+  justify-content: center;
+  letter-spacing: 0.12em;
+  min-height: 42px;
+  padding: 0 1.15rem;
+  text-transform: uppercase;
+  transition: transform 180ms ease, background-color 180ms ease, color 180ms ease,
+    border-color 180ms ease;
+}
+
+.btn-primary {
+  background: #f7f2ea;
+  color: #050505;
+}
+
+.btn-secondary {
+  border: 1px solid rgba(247, 242, 234, 0.62);
+  color: #f7f2ea;
+}
+
+.btn-dark {
+  background: #050505;
+  color: #f7f2ea;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-dark:hover {
+  transform: translateY(-2px);
+}
+
+.placeholder-image {
+  background:
+    linear-gradient(145deg, rgba(5, 5, 5, 0.24), rgba(200, 163, 93, 0.1)),
+    radial-gradient(circle at 20% 20%, rgba(247, 242, 234, 0.62), transparent 34%),
+    linear-gradient(120deg, #d8cabe, #f7f2ea 38%, #a98b72);
+  min-height: 280px;
+  overflow: hidden;
+  position: relative;
+}
+
+.placeholder-image::after {
+  border: 1px solid rgba(5, 5, 5, 0.18);
+  border-radius: 999px;
+  content: "";
+  height: 34%;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 54%;
+}
+
+.fade-up {
+  animation: fadeUp 800ms ease both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
