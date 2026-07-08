@@ -141,9 +141,9 @@ export function VisionMissionSection() {
               alt={`BillBirD ${title.toLowerCase()} eyewear campaign`}
               className="aspect-[16/9]"
             />
-            <div className="border-t border-ink/10 p-7 md:p-10">
-              <p className="eyebrow mb-4">{title}</p>
-              <p className="max-w-xl font-serif text-3xl leading-[1.25] md:text-4xl">{body}</p>
+            <div className="border-t border-ink/10 p-6 md:p-8">
+              <p className="eyebrow mb-3">{title}</p>
+              <p className="max-w-lg font-serif text-2xl leading-[1.28] md:text-3xl">{body}</p>
             </div>
           </article>
         ))}
