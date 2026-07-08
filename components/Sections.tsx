@@ -129,8 +129,8 @@ export function AboutSection() {
 
 export function VisionMissionSection() {
   return (
-    <section className="bg-charcoal py-20 text-ivory">
-      <div className="section-shell grid gap-5 lg:grid-cols-2">
+    <section className="bg-charcoal py-14 text-ivory">
+      <div className="section-shell grid gap-4 lg:grid-cols-2">
         {[
           ["Vision", "At BillBirD, our vision is to become a globally recognized leader in luxury eyewear, setting new standards through exceptional craftsmanship, innovative design, and uncompromising quality."],
           ["Mission", "At BillBirD, our mission is to redefine modern eyewear by creating a globally trusted brand that represents luxury, innovation, and timeless sophistication."],
@@ -141,9 +141,9 @@ export function VisionMissionSection() {
               alt={`BillBirD ${title.toLowerCase()} eyewear campaign`}
               className="aspect-[16/9]"
             />
-            <div className="border-t border-ink/10 p-6 md:p-8">
-              <p className="eyebrow mb-3">{title}</p>
-              <p className="max-w-lg font-serif text-2xl leading-[1.28] md:text-3xl">{body}</p>
+            <div className="border-t border-ink/10 p-5 md:p-6">
+              <p className="eyebrow mb-2 text-[0.64rem]">{title}</p>
+              <p className="max-w-md font-serif text-xl leading-[1.34] md:text-2xl">{body}</p>
             </div>
           </article>
         ))}
