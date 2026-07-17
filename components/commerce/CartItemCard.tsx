@@ -4,18 +4,12 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { formatAed } from "@/data/products";
 import { useCart } from "@/lib/cart-store";
+import { formatEyePrescription, prescriptionStatusText } from "@/lib/prescription-format";
 import type { CartItem } from "@/types/commerce";
-
-function prescriptionStatus(item: CartItem) {
-  const method = item.lensSelection?.prescription.method;
-  if (method === "submit-later") return "Prescription pending - our team will contact you after checkout.";
-  if (method === "upload") return "Prescription uploaded";
-  if (method === "manual") return "Prescription added";
-  return "Prescription not required";
-}
 
 export function CartItemCard({ item }: { item: CartItem }) {
   const { updateQuantity, removeItem } = useCart();
+  const prescription = item.lensSelection?.prescription;
 
   return (
     <article className="grid gap-4 rounded-[10px] border border-ink/10 bg-white p-4 shadow-sm sm:grid-cols-[150px_1fr]">
@@ -30,7 +24,26 @@ export function CartItemCard({ item }: { item: CartItem }) {
             <p className="mt-1 text-sm text-ink/60">
               {item.lensSelection?.powerType === "with-power" ? "With Power" : "Without Power"} / {item.lensSelection?.lensPackageName}
             </p>
-            <p className="mt-2 rounded-lg bg-ivory p-2 text-xs text-ink/60">{prescriptionStatus(item)}</p>
+            <div className="mt-2 rounded-lg bg-ivory p-3 text-xs leading-5 text-ink/60">
+              <p className="font-semibold text-ink">{prescriptionStatusText(prescription)}</p>
+              {prescription?.method === "manual" ? (
+                <div className="mt-2 space-y-1">
+                  <p>
+                    <strong className="text-ink">Right / OD:</strong>{" "}
+                    {formatEyePrescription(prescription.rightEye)}
+                  </p>
+                  <p>
+                    <strong className="text-ink">Left / OS:</strong>{" "}
+                    {formatEyePrescription(prescription.leftEye)}
+                  </p>
+                  {prescription.notes ? (
+                    <p>
+                      <strong className="text-ink">Notes:</strong> {prescription.notes}
+                    </p>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
           </div>
           <button onClick={() => removeItem(item.id)} className="grid size-10 place-items-center rounded-full border border-ink/10 text-ink/60" aria-label="Remove item">
             <Trash2 size={17} />

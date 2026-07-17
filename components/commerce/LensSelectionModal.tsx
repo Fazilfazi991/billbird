@@ -15,10 +15,16 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatAed } from "@/data/products";
 import { getLensTypes } from "@/lib/lens-service";
+import {
+  formatEyePrescription,
+  prescriptionMethodLabel,
+  prescriptionStatusText,
+} from "@/lib/prescription-format";
 import type { LensPackage, LensSelection, PowerType, PrescriptionData, Product } from "@/types/commerce";
 
 const sphValues = Array.from({ length: 81 }, (_, index) => (8 - index * 0.25).toFixed(2));
 const cylValues = Array.from({ length: 25 }, (_, index) => (0 - index * 0.25).toFixed(2));
+const addValues = Array.from({ length: 12 }, (_, index) => (0.75 + index * 0.25).toFixed(2));
 
 function emptyPrescription(method: PrescriptionData["method"]): PrescriptionData {
   return { method, rightEye: {}, leftEye: {} };
@@ -231,6 +237,29 @@ export function LensSelectionModal({
     if (step === 3) void addConfiguredProductToCart();
   }
 
+  function handlePrescriptionMethodSelect(method: PrescriptionData["method"]) {
+    setErrors([]);
+    setPrescription((current) => {
+      if (current.method === method) return current;
+      if (method === "manual") {
+        return {
+          method,
+          rightEye: current.rightEye ?? {},
+          leftEye: current.leftEye ?? {},
+          notes: current.notes,
+        };
+      }
+      if (method === "upload") {
+        return {
+          method,
+          uploadedFile: current.uploadedFile,
+          notes: current.notes,
+        };
+      }
+      return emptyPrescription(method);
+    });
+  }
+
   const canContinue = step === 3 && Boolean(prescription.method);
 
   const buttonLabel = cartStatus === "loading" ? "Adding to Cart..." : "Add to Cart";
@@ -337,6 +366,31 @@ export function LensSelectionModal({
                     <p className="text-sm text-ink/58">Lens: {selectedPackage?.name}</p>
                     <p className="mt-2 font-bold">{formatAed(totalPrice)}</p>
                   </div>
+                </div>
+                <div className="mt-4 rounded-lg bg-ivory p-3 text-sm leading-6 text-ink/65">
+                  <p>
+                    <strong className="text-ink">Prescription:</strong>{" "}
+                    {prescriptionMethodLabel(powerType === "without-power" ? "not-required" : prescription.method)}
+                  </p>
+                  {powerType === "with-power" && prescription.method === "manual" ? (
+                    <>
+                      <p>
+                        <strong className="text-ink">Right / OD:</strong>{" "}
+                        {formatEyePrescription(prescription.rightEye)}
+                      </p>
+                      <p>
+                        <strong className="text-ink">Left / OS:</strong>{" "}
+                        {formatEyePrescription(prescription.leftEye)}
+                      </p>
+                      {prescription.notes ? (
+                        <p>
+                          <strong className="text-ink">Notes:</strong> {prescription.notes}
+                        </p>
+                      ) : null}
+                    </>
+                  ) : (
+                    <p>{prescriptionStatusText(powerType === "without-power" ? { method: "not-required" } : prescription)}</p>
+                  )}
                 </div>
               </div>
               <div className="mt-7 grid w-full gap-3">
@@ -489,7 +543,7 @@ export function LensSelectionModal({
                 ].map((option) => (
                   <button
                     key={option.method}
-                    onClick={() => setPrescription(emptyPrescription(option.method as PrescriptionData["method"]))}
+                    onClick={() => handlePrescriptionMethodSelect(option.method as PrescriptionData["method"])}
                     className={`min-h-20 rounded-[14px] border bg-white p-4 text-start shadow-sm transition hover:-translate-y-0.5 ${
                       prescription.method === option.method ? "border-gold ring-2 ring-gold/25" : "border-ink/10"
                     }`}
@@ -563,6 +617,12 @@ export function LensSelectionModal({
                         </label>
                         <label className="text-sm">PD
                           <input className="mt-1 min-h-11 w-full rounded-lg border border-ink/15 px-3" type="number" step="0.5" value={prescription[eye]?.pd ?? ""} onChange={(event) => updateEye(eye, "pd", event.target.value)} />
+                        </label>
+                        <label className="text-sm">ADD
+                          <select className="mt-1 min-h-11 w-full rounded-lg border border-ink/15 bg-white px-3" value={prescription[eye]?.add ?? ""} onChange={(event) => updateEye(eye, "add", event.target.value)}>
+                            <option value="">Optional</option>
+                            {addValues.map((value) => <option key={value} value={value}>{value}</option>)}
+                          </select>
                         </label>
                       </div>
                     </div>
