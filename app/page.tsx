@@ -24,11 +24,11 @@ export default function Home() {
         <IntroStatement />
         <CollectionCards />
         <AboutSection />
+        <ProductGrid />
         <VisionMissionSection />
         <WhyChooseUs />
         <SignatureSection />
         <CustomizationSection />
-        <ProductGrid />
         <PhilosophySection />
         <CraftsmanshipSection />
         <ContactSection />

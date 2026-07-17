@@ -11,8 +11,9 @@ export function ScrollAnimations() {
     );
     let lastY = window.scrollY;
 
-    targets.forEach((target) => {
+    targets.forEach((target, index) => {
       target.classList.add("scroll-reveal");
+      target.classList.add(index % 2 === 0 ? "from-down" : "from-up");
     });
 
     const observer = new IntersectionObserver(
@@ -24,8 +25,10 @@ export function ScrollAnimations() {
           const target = entry.target as HTMLElement;
 
           if (entry.isIntersecting) {
-            target.classList.toggle("from-up", direction === "up");
-            target.classList.toggle("from-down", direction === "down");
+            const naturalDirection = Array.from(targets).indexOf(target) % 2 === 0 ? "down" : "up";
+            const revealDirection = direction === "up" ? (naturalDirection === "down" ? "up" : "down") : naturalDirection;
+            target.classList.toggle("from-up", revealDirection === "up");
+            target.classList.toggle("from-down", revealDirection === "down");
             target.classList.add("is-visible");
           } else if (entry.boundingClientRect.top > window.innerHeight || entry.boundingClientRect.bottom < 0) {
             target.classList.remove("is-visible");

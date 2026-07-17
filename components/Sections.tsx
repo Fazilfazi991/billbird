@@ -69,7 +69,7 @@ export function IntroStatement() {
 }
 
 export function CollectionCards() {
-  const collectionLinks = ["/products/eyeglasses", "/products/sunglasses", "/#customization"];
+  const featuredProducts = [shopProducts[1], shopProducts[0], shopProducts[2]];
 
   return (
     <section id="collection" className="bg-bone py-14 md:py-20">
@@ -87,15 +87,15 @@ export function CollectionCards() {
           {collections.map((item, index) => (
             <article key={item.title} className="group bg-ivory">
               <BrandImage
-                src={imagePath([7, 6, 4][index])}
-                alt={`${item.title} by BillBirD`}
+                src={featuredProducts[index]?.images[0] ?? imagePath([7, 6, 4][index])}
+                alt={`${featuredProducts[index]?.name ?? item.title} by BillBirD`}
                 className="aspect-[4/5]"
                 imageClassName="group-hover:scale-105"
               />
               <div className="p-5 md:p-6">
                 <h3 className="font-serif text-2xl md:text-3xl">{item.title}</h3>
                 <p className="mt-3 min-h-14 text-sm leading-6 text-charcoal/68">{item.description}</p>
-                <Link href={collectionLinks[index]} className="mt-5 inline-flex items-center gap-2 text-[0.7rem] font-extrabold uppercase tracking-[0.14em]">
+                <Link href={featuredProducts[index] ? `/products/${featuredProducts[index].slug}` : "/products"} className="mt-5 inline-flex items-center gap-2 text-[0.7rem] font-extrabold uppercase tracking-[0.14em]">
                   Explore <ArrowUpRight size={15} />
                 </Link>
               </div>

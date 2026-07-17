@@ -4,7 +4,13 @@ const img = (index: number) =>
   `/images/billbird/billbird_placeholder_${String(index).padStart(2, "0")}.webp`;
 
 const product01 = (file: string) =>
-  `/Product_01_BillBird_Black_Spectacles/Product_01_BillBird_Black_Spectacles/${file}`;
+  `/products/Product_01_BillBird_Black_Spectacles/Product_01_BillBird_Black_Spectacles/${file}`;
+
+const product02 = (file: string) =>
+  `/products/Product_02_BillBird_Clear_Yellow_Spectacles/Product_02_BillBird_Clear_Yellow_Spectacles/${encodeURIComponent(file)}`;
+
+const product03 = (file: string) =>
+  `/products/Product_03_BillBird_Amber_Spectacles(1)/Product_03_BillBird_Amber_Spectacles/${encodeURIComponent(file)}`;
 
 export const products: Product[] = [
   {
@@ -54,54 +60,92 @@ export const products: Product[] = [
   },
   {
     id: "bb-002",
-    slug: "amber-sun-classic",
-    name: "BillBirD Amber Sun Classic",
-    sku: "BB-SUN-002",
-    category: "sunglasses",
-    gender: "women",
+    slug: "clear-yellow-spectacles",
+    name: "BillBirD Clear Yellow Spectacles",
+    sku: "BB-CLR-002",
+    category: "eyeglasses",
+    gender: "unisex",
     shape: "Rectangle",
-    material: "Acetate",
-    frameType: "Sunglasses",
+    material: "Crystal acetate",
+    frameType: "Optical frame",
     price: 460,
-    images: [img(5), img(3), img(10)],
     colors: [
-      { name: "Amber", value: "#b9823d", image: img(5) },
-      { name: "Brown", value: "#7A4A34", image: img(3) },
-      { name: "Black", value: "#050505", image: img(10) },
+      {
+        name: "Clear Yellow",
+        value: "#f2d94c",
+        image: product02("Product 02 – Image 01 – Front View.png"),
+      },
+      {
+        name: "Crystal",
+        value: "#f8f3e8",
+        image: product02("Product 02 – Image 02 – Side View.png"),
+      },
+      {
+        name: "Gold Detail",
+        value: "#c8a35d",
+        image: product02("Product 02 – Image 05 – Detail Close-Up.png"),
+      },
+    ],
+    images: [
+      product02("Product 02 – Image 01 – Front View.png"),
+      product02("Product 02 – Image 02 – Side View.png"),
+      product02("Product 02 – Image 03 – Three-Quarter View.png"),
+      product02("Product 02 – Image 04 – Folded View.png"),
+      product02("Product 02 – Image 05 – Detail Close-Up.png"),
+      product02("Product 02 – Image 06 – Model Wearing View.png"),
     ],
     sizes: ["S", "M"],
     stock: 9,
     isNew: true,
     prescriptionAvailable: true,
     rating: 4.6,
-    dimensions: { lensWidth: 54, bridgeWidth: 18, templeLength: 142, weight: "30g" },
-    highlights: ["UV 400 protection", "Warm lens tone", "One-year warranty"],
+    dimensions: { lensWidth: 53, bridgeWidth: 18, templeLength: 142, weight: "27g" },
+    highlights: ["Crystal clear acetate", "Yellow accent lens", "Gold BillBirD branding"],
   },
   {
     id: "bb-003",
-    slug: "black-statement-sun",
-    name: "BillBirD Black Statement Sun",
-    sku: "BB-SUN-003",
+    slug: "amber-spectacles",
+    name: "BillBirD Amber Spectacles",
+    sku: "BB-AMB-003",
     category: "sunglasses",
-    gender: "women",
-    shape: "Oversized",
-    material: "Hand-finished acetate",
+    gender: "unisex",
+    shape: "Rectangle",
+    material: "Layered acetate",
     frameType: "Sunglasses",
     price: 510,
     originalPrice: 590,
-    images: [img(6), img(10), img(4)],
+    images: [
+      product03("Product 03 – Image 01 – Front View.png"),
+      product03("Product 03 – Image 02 – Side View.png"),
+      product03("Product 03 – Image 03 – Three-Quarter View.png"),
+      product03("Product 03 – Image 04 – Folded View.png"),
+      product03("Product 03 – Image 05 – Detail Close-Up.png"),
+      product03("Product 03 – Image 06 – Model Wearing View.png"),
+    ],
     colors: [
-      { name: "Black", value: "#050505", image: img(6) },
-      { name: "Burgundy", value: "#4b1116", image: img(4) },
-      { name: "Ivory", value: "#F7F2EA", image: img(2) },
+      {
+        name: "Amber",
+        value: "#b9823d",
+        image: product03("Product 03 – Image 01 – Front View.png"),
+      },
+      {
+        name: "Honey",
+        value: "#d0a25a",
+        image: product03("Product 03 – Image 03 – Three-Quarter View.png"),
+      },
+      {
+        name: "Rose Lens",
+        value: "#e6b4a0",
+        image: product03("Product 03 – Image 05 – Detail Close-Up.png"),
+      },
     ],
     sizes: ["M"],
     stock: 7,
     bestSeller: true,
-    prescriptionAvailable: false,
+    prescriptionAvailable: true,
     rating: 4.7,
-    dimensions: { lensWidth: 55, bridgeWidth: 20, templeLength: 145, weight: "32g" },
-    highlights: ["Bold silhouette", "Dark premium lens", "Luxury case included"],
+    dimensions: { lensWidth: 55, bridgeWidth: 19, templeLength: 145, weight: "31g" },
+    highlights: ["Warm amber acetate", "Rose-tinted lens", "Luxury case included"],
   },
   {
     id: "bb-004",
