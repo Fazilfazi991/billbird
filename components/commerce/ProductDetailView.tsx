@@ -36,7 +36,6 @@ export function ProductDetailView({ product }: { product: Product }) {
       totalPrice: product.price + selection.lensPrice,
       lensSelection: selection,
     });
-    setLensOpen(false);
     setNotice("Lens selection added to cart.");
   }
 
