@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ScrollAnimations } from "@/components/ScrollAnimations";
+import { CartProvider } from "@/lib/cart-store";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,8 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ScrollAnimations />
-        {children}
+        <CartProvider>
+          <ScrollAnimations />
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

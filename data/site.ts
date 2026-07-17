@@ -12,12 +12,12 @@ export const brand = {
 };
 
 export const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Collection", href: "#collection" },
-  { label: "Customization", href: "#customization" },
-  { label: "Signature Designs", href: "#signature" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/#home" },
+  { label: "About", href: "/#about" },
+  { label: "Collection", href: "/products" },
+  { label: "Customization", href: "/#customization" },
+  { label: "Signature Designs", href: "/#signature" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export const collections = [
