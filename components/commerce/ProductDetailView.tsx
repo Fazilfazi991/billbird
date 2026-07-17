@@ -13,10 +13,10 @@ import { ProductCard } from "./ProductCard";
 export function ProductDetailView({ product }: { product: Product }) {
   const { addItem } = useCart();
   const [imageIndex, setImageIndex] = useState(0);
-  const [color, setColor] = useState(product.colors[0]);
   const [size, setSize] = useState(product.sizes[0]);
   const [lensOpen, setLensOpen] = useState(false);
   const [notice, setNotice] = useState("");
+  const frameColor = product.colors[0]?.name ?? "Default";
 
   const related = useMemo(
     () => products.filter((item) => item.id !== product.id && (item.category === product.category || item.gender === product.gender)).slice(0, 3),
@@ -28,8 +28,8 @@ export function ProductDetailView({ product }: { product: Product }) {
       productId: product.id,
       productSlug: product.slug,
       productName: product.name,
-      productImage: color.image ?? product.images[0],
-      frameColor: color.name,
+      productImage: product.images[imageIndex] ?? product.images[0],
+      frameColor,
       frameSize: size,
       quantity: 1,
       framePrice: product.price,
@@ -50,8 +50,8 @@ export function ProductDetailView({ product }: { product: Product }) {
       productId: product.id,
       productSlug: product.slug,
       productName: product.name,
-      productImage: color.image ?? product.images[0],
-      frameColor: color.name,
+      productImage: product.images[imageIndex] ?? product.images[0],
+      frameColor,
       frameSize: size,
       quantity: 1,
       framePrice: product.price,
@@ -72,7 +72,7 @@ export function ProductDetailView({ product }: { product: Product }) {
         <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(380px,0.92fr)]">
           <div>
             <div className="overflow-hidden rounded-[12px] bg-bone">
-              <img src={color.image ?? product.images[imageIndex]} alt={product.name} className="aspect-[4/5] w-full object-cover md:aspect-[5/4]" />
+              <img src={product.images[imageIndex] ?? product.images[0]} alt={product.name} className="aspect-[4/5] w-full object-cover md:aspect-[5/4]" />
             </div>
             <div className="mt-3 grid grid-cols-4 gap-3">
               {product.images.map((image, index) => (
@@ -98,20 +98,6 @@ export function ProductDetailView({ product }: { product: Product }) {
             {product.rating ? <p className="mt-4 text-sm font-semibold">{product.rating.toFixed(1)} / 5 customer rating</p> : null}
 
             <div className="mt-7 space-y-5">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-leather">Frame color: {color.name}</p>
-                <div className="mt-3 flex gap-2">
-                  {product.colors.map((item) => (
-                    <button
-                      key={item.name}
-                      onClick={() => setColor(item)}
-                      className={`size-11 rounded-full border-2 ${color.name === item.name ? "border-ink" : "border-white"}`}
-                      style={{ background: item.value }}
-                      aria-label={`Select ${item.name}`}
-                    />
-                  ))}
-                </div>
-              </div>
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-leather">Frame size</p>
                 <div className="mt-3 flex gap-2">
@@ -201,7 +187,7 @@ export function ProductDetailView({ product }: { product: Product }) {
       {lensOpen ? (
         <LensSelectionModal
           product={product}
-          frameColor={color.name}
+          frameColor={frameColor}
           frameSize={size}
           onClose={() => setLensOpen(false)}
           onComplete={addWithLens}

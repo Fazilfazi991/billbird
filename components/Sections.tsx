@@ -1,5 +1,7 @@
 import { ArrowUpRight, Mail, MessageCircle } from "lucide-react";
-import { benefits, brand, collections, philosophy, products } from "@/data/site";
+import Link from "next/link";
+import { formatAed, products as shopProducts } from "@/data/products";
+import { benefits, brand, collections, philosophy } from "@/data/site";
 
 const imagePath = (index: number) =>
   `/images/billbird/billbird_placeholder_${String(index).padStart(2, "0")}.webp`;
@@ -67,6 +69,8 @@ export function IntroStatement() {
 }
 
 export function CollectionCards() {
+  const collectionLinks = ["/products/eyeglasses", "/products/sunglasses", "/#customization"];
+
   return (
     <section id="collection" className="bg-bone py-14 md:py-20">
       <div className="section-shell">
@@ -91,9 +95,9 @@ export function CollectionCards() {
               <div className="p-5 md:p-6">
                 <h3 className="font-serif text-2xl md:text-3xl">{item.title}</h3>
                 <p className="mt-3 min-h-14 text-sm leading-6 text-charcoal/68">{item.description}</p>
-                <a href={brand.whatsapp} className="mt-5 inline-flex items-center gap-2 text-[0.7rem] font-extrabold uppercase tracking-[0.14em]">
+                <Link href={collectionLinks[index]} className="mt-5 inline-flex items-center gap-2 text-[0.7rem] font-extrabold uppercase tracking-[0.14em]">
                   Explore <ArrowUpRight size={15} />
-                </a>
+                </Link>
               </div>
             </article>
           ))}
@@ -226,21 +230,34 @@ export function ProductGrid() {
   return (
     <section className="bg-ivory py-14 md:py-20">
       <div className="section-shell">
-        <p className="eyebrow mb-3 text-center">Product Showcase</p>
-        <h2 className="display-title text-center text-4xl md:text-5xl">The Atelier Selection</h2>
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="eyebrow mb-3">Product Showcase</p>
+          <h2 className="display-title text-4xl md:text-5xl">The Atelier Selection</h2>
+          <p className="mt-4 text-sm leading-7 text-charcoal/68">
+            Shop the live demo catalog with frame details, lens selection, cart, and checkout.
+          </p>
+          <Link href="/products" className="btn-dark mt-6">Shop All Products</Link>
+        </div>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 md:mt-10 lg:grid-cols-3">
-          {products.map(([name, category], index) => (
-            <article key={name} className="group bg-bone/45 p-3">
-              <BrandImage
-                src={imagePath([7, 5, 3, 4, 8, 10][index])}
-                alt={`${name} ${category} eyewear`}
-                className="aspect-square"
-                imageClassName="group-hover:scale-105"
-              />
+          {shopProducts.slice(0, 6).map((product) => (
+            <article key={product.id} className="group bg-bone/45 p-3">
+              <Link href={`/products/${product.slug}`} className="block">
+                <BrandImage
+                  src={product.images[0]}
+                  alt={`${product.name} ${product.frameType}`}
+                  className="aspect-square"
+                  imageClassName="group-hover:scale-105"
+                />
+              </Link>
               <div className="p-4 text-center">
-                <h3 className="font-serif text-2xl">{name}</h3>
-                <p className="mt-1 text-[0.7rem] font-bold uppercase tracking-[0.16em] text-leather">{category}</p>
-                <a href={brand.whatsapp} className="btn-dark mt-4 min-h-9 px-5">Enquire</a>
+                <h3 className="font-serif text-2xl">{product.name}</h3>
+                <p className="mt-1 text-[0.7rem] font-bold uppercase tracking-[0.16em] text-leather">
+                  {product.frameType}
+                </p>
+                <p className="mt-2 text-sm font-bold">{formatAed(product.price)}</p>
+                <Link href={`/products/${product.slug}`} className="btn-dark mt-4 min-h-9 px-5">
+                  View Product
+                </Link>
               </div>
             </article>
           ))}
