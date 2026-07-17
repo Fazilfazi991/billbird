@@ -39,6 +39,49 @@ export interface LensSelection {
   lensPrice: number;
 }
 
+export type CoverCustomizationType = "photo" | "engraving" | "photo-and-engraving";
+
+export interface CoverPhotoCustomization {
+  originalFile?: {
+    name: string;
+    type: string;
+    size: number;
+    previewUrl?: string;
+    url?: string;
+  };
+  crop?: {
+    x: number;
+    y: number;
+    zoom: number;
+    rotation?: number;
+  };
+  cropConfirmed?: boolean;
+  qualityWarning?: string;
+}
+
+export interface CoverEngraving {
+  text: string;
+  fontId?: string;
+  alignment?: "start" | "center" | "end";
+  spellingConfirmed: boolean;
+}
+
+export interface CoverCustomization {
+  enabled: boolean;
+  type?: CoverCustomizationType;
+  coverId?: string;
+  coverName?: string;
+  coverColorId?: string;
+  coverColorName?: string;
+  coverColorValue?: string;
+  mockupImage?: string;
+  photo?: CoverPhotoCustomization;
+  engraving?: CoverEngraving;
+  previewImageUrl?: string;
+  additionalPrice: number;
+  customizationConfirmed: boolean;
+}
+
 export interface CartItem {
   id: string;
   productId: string;
@@ -50,6 +93,7 @@ export interface CartItem {
   quantity: number;
   framePrice: number;
   lensSelection?: LensSelection;
+  coverCustomization?: CoverCustomization;
   totalPrice: number;
 }
 
@@ -86,6 +130,31 @@ export interface Product {
     weight: string;
   };
   highlights: string[];
+  coverOptions?: ProductCoverOptions;
+}
+
+export interface ProductCoverOptions {
+  standardCoverIncluded: boolean;
+  customizationAvailable: boolean;
+  covers: Array<{
+    id: string;
+    name: string;
+    mockupImage: string;
+    colors: Array<{
+      id: string;
+      name: string;
+      value: string;
+      mockupImage?: string;
+      inStock: boolean;
+    }>;
+  }>;
+  pricing: {
+    basePrice: number;
+    photoPrice: number;
+    engravingPrice: number;
+    photoAndTextPrice?: number;
+  };
+  engravingCharacterLimit: number;
 }
 
 export interface LensPackage {

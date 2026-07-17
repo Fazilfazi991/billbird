@@ -2,14 +2,22 @@
 
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { formatAed } from "@/data/products";
+import { formatAed, products } from "@/data/products";
 import { useCart } from "@/lib/cart-store";
 import { formatEyePrescription, prescriptionStatusText } from "@/lib/prescription-format";
+import { useState } from "react";
 import type { CartItem } from "@/types/commerce";
+import {
+  CoverAddOnSelector,
+  CoverCustomizationSummary,
+  RemoveCoverCustomizationButton,
+} from "./CoverCustomization";
 
 export function CartItemCard({ item }: { item: CartItem }) {
-  const { updateQuantity, removeItem } = useCart();
+  const { updateItem, updateQuantity, removeItem } = useCart();
+  const [editingCover, setEditingCover] = useState(false);
   const prescription = item.lensSelection?.prescription;
+  const product = products.find((entry) => entry.id === item.productId);
 
   return (
     <article className="grid gap-4 rounded-[10px] border border-ink/10 bg-white p-4 shadow-sm sm:grid-cols-[150px_1fr]">
@@ -44,6 +52,7 @@ export function CartItemCard({ item }: { item: CartItem }) {
                 </div>
               ) : null}
             </div>
+            <CoverCustomizationSummary customization={item.coverCustomization} compact />
           </div>
           <button onClick={() => removeItem(item.id)} className="grid size-10 place-items-center rounded-full border border-ink/10 text-ink/60" aria-label="Remove item">
             <Trash2 size={17} />
@@ -66,8 +75,25 @@ export function CartItemCard({ item }: { item: CartItem }) {
         </div>
         <div className="mt-3 flex flex-wrap gap-3 text-xs font-bold uppercase tracking-[0.12em] text-leather">
           <Link href={`/products/${item.productSlug}`}>Edit lenses</Link>
+          {product?.coverOptions?.customizationAvailable ? (
+            <button type="button" onClick={() => setEditingCover((current) => !current)}>
+              Edit Cover
+            </button>
+          ) : null}
+          {item.coverCustomization?.enabled ? (
+            <RemoveCoverCustomizationButton onRemove={() => updateItem(item.id, { coverCustomization: undefined })} />
+          ) : null}
           <button>Save for later</button>
         </div>
+        {editingCover && product?.coverOptions ? (
+          <div className="mt-4">
+            <CoverAddOnSelector
+              options={product.coverOptions}
+              value={item.coverCustomization}
+              onChange={(coverCustomization) => updateItem(item.id, { coverCustomization })}
+            />
+          </div>
+        ) : null}
       </div>
     </article>
   );

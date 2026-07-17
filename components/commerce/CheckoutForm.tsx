@@ -31,9 +31,14 @@ export function CheckoutForm() {
     payment: "card",
   });
   const [confirmed, setConfirmed] = useState(false);
+  const [coverConfirmed, setCoverConfirmed] = useState(false);
 
   const needsPrescriptionConfirmation = useMemo(
     () => items.some((item) => ["manual", "upload"].includes(item.lensSelection?.prescription.method ?? "")),
+    [items],
+  );
+  const needsCoverConfirmation = useMemo(
+    () => items.some((item) => item.coverCustomization?.enabled),
     [items],
   );
 
@@ -47,6 +52,7 @@ export function CheckoutForm() {
       .map((key) => `${key.replace(/([A-Z])/g, " $1")} is required.`);
     if (!items.length) nextErrors.push("Your cart is empty.");
     if (needsPrescriptionConfirmation && !confirmed) nextErrors.push("Please confirm the prescription information is accurate.");
+    if (needsCoverConfirmation && !coverConfirmed) nextErrors.push("Please confirm the cover customization details are correct.");
     setErrors(nextErrors);
     if (nextErrors.length) return;
 
@@ -119,6 +125,19 @@ export function CheckoutForm() {
                 <label className="mt-4 flex min-h-11 items-start gap-3 text-sm">
                   <input type="checkbox" checked={confirmed} onChange={(event) => setConfirmed(event.target.checked)} className="mt-1 size-4 accent-ink" />
                   <span>I confirm that the prescription information provided is accurate.</span>
+                </label>
+              </section>
+            ) : null}
+
+            {needsCoverConfirmation ? (
+              <section className="rounded-[10px] border border-ink/10 bg-white p-5">
+                <h2 className="font-serif text-2xl">Cover customization confirmation</h2>
+                <p className="mt-2 text-sm leading-6 text-ink/58">
+                  Custom cover details will be saved with each order item for production review.
+                </p>
+                <label className="mt-4 flex min-h-11 items-start gap-3 text-sm">
+                  <input type="checkbox" checked={coverConfirmed} onChange={(event) => setCoverConfirmed(event.target.checked)} className="mt-1 size-4 accent-ink" />
+                  <span>I confirm that the uploaded photo and engraving details are correct.</span>
                 </label>
               </section>
             ) : null}

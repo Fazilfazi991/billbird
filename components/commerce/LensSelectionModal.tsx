@@ -20,7 +20,8 @@ import {
   prescriptionMethodLabel,
   prescriptionStatusText,
 } from "@/lib/prescription-format";
-import type { LensPackage, LensSelection, PowerType, PrescriptionData, Product } from "@/types/commerce";
+import type { CoverCustomization, LensPackage, LensSelection, PowerType, PrescriptionData, Product } from "@/types/commerce";
+import { CoverCustomizationSummary } from "./CoverCustomization";
 
 const sphValues = Array.from({ length: 81 }, (_, index) => (8 - index * 0.25).toFixed(2));
 const cylValues = Array.from({ length: 25 }, (_, index) => (0 - index * 0.25).toFixed(2));
@@ -34,12 +35,14 @@ export function LensSelectionModal({
   product,
   frameColor,
   frameSize,
+  coverCustomization,
   onClose,
   onComplete,
 }: {
   product: Product;
   frameColor: string;
   frameSize: string;
+  coverCustomization?: CoverCustomization;
   onClose: () => void;
   onComplete: (selection: LensSelection) => void;
 }) {
@@ -264,7 +267,8 @@ export function LensSelectionModal({
   const canContinue = step === 3 && Boolean(prescription.method);
 
   const buttonLabel = cartStatus === "loading" ? "Adding to Cart..." : "Add to Cart";
-  const totalPrice = product.price + (selectedPackage?.price ?? 0);
+  const coverPrice = coverCustomization?.additionalPrice ?? 0;
+  const totalPrice = product.price + (selectedPackage?.price ?? 0) + coverPrice;
   const powerTypeLabel = powerType === "with-power" ? "With Power" : "Without Power";
 
   return (
@@ -365,9 +369,13 @@ export function LensSelectionModal({
                     <p className="mt-1 text-sm text-ink/58">Frame Size: {frameSize}</p>
                     <p className="text-sm text-ink/58">Power Type: {powerTypeLabel}</p>
                     <p className="text-sm text-ink/58">Lens: {selectedPackage?.name}</p>
+                    {coverCustomization?.enabled ? (
+                      <p className="text-sm text-ink/58">Cover: Custom Cover</p>
+                    ) : null}
                     <p className="mt-2 font-bold">{formatAed(totalPrice)}</p>
                   </div>
                 </div>
+                <CoverCustomizationSummary customization={coverCustomization} compact />
                 <div className="mt-4 rounded-lg bg-ivory p-3 text-sm leading-6 text-ink/65">
                   <p>
                     <strong className="text-ink">Prescription:</strong>{" "}
@@ -420,10 +428,11 @@ export function LensSelectionModal({
               <div>
                 <p className="font-serif text-xl leading-tight">{product.name}</p>
                 <p className="mt-1 text-xs text-ink/55">
-                  {frameColor} / {frameSize} / {formatAed(product.price)}
+                  {frameColor} / {frameSize} / {formatAed(product.price + coverPrice)}
                 </p>
               </div>
             </div>
+            <CoverCustomizationSummary customization={coverCustomization} compact />
           </div>
 
           {step === 1 ? (
@@ -670,7 +679,7 @@ export function LensSelectionModal({
         {cartStatus !== "success" ? (
         <footer className="sticky bottom-0 border-t border-ink/10 bg-ivory/96 p-5 backdrop-blur">
           <div className="mb-3 flex items-center justify-between gap-4 text-sm">
-            <span className="text-ink/58">Frame + lens</span>
+            <span className="text-ink/58">Frame + lens + cover</span>
             <strong>{formatAed(totalPrice)}</strong>
           </div>
           {step === 3 ? (

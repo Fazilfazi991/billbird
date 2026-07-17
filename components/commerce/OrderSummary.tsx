@@ -12,10 +12,12 @@ export function OrderSummary({
   showCheckoutButton?: boolean;
 }) {
   const { totals, items } = useCart();
+  const customizedItems = items.filter((item) => item.coverCustomization?.enabled);
 
   const rows = [
     ["Frame subtotal", totals.subtotal],
     ["Lens charges", totals.lensCharges],
+    ["Cover add-ons", totals.coverCharges],
     ["Discount", -totals.discount],
     ["Shipping", totals.shipping],
     ["VAT", totals.vat],
@@ -25,6 +27,24 @@ export function OrderSummary({
     <aside className="rounded-[10px] border border-ink/10 bg-white p-5 shadow-sm">
       <h2 className="font-serif text-2xl">Order Summary</h2>
       <div className="mt-5 space-y-3 text-sm">
+        {customizedItems.length ? (
+          <div className="mb-4 space-y-3 rounded-lg bg-ivory p-3">
+            {customizedItems.map((item) => item.coverCustomization?.enabled ? (
+              <div key={item.id} className="flex gap-3 text-xs leading-5 text-ink/62">
+                {item.coverCustomization.photo?.originalFile?.previewUrl ? (
+                  <img src={item.coverCustomization.photo.originalFile.previewUrl} alt="" className="size-12 rounded object-cover" />
+                ) : null}
+                <div>
+                  <p className="font-semibold text-ink">{item.productName}</p>
+                  <p>Cover Color: {item.coverCustomization.coverColorName}</p>
+                  <p>Customization: {item.coverCustomization.type}</p>
+                  {item.coverCustomization.engraving?.text ? <p>Engraving: &ldquo;{item.coverCustomization.engraving.text}&rdquo;</p> : null}
+                  <p>Cover Add-on: {formatAed(item.coverCustomization.additionalPrice)}</p>
+                </div>
+              </div>
+            ) : null)}
+          </div>
+        ) : null}
         {rows.map(([label, value]) => (
           <div key={label as string} className="flex justify-between gap-4">
             <span className="text-ink/60">{label}</span>

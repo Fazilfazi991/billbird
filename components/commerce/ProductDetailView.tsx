@@ -1,11 +1,12 @@
 "use client";
 
-import { Heart, PackageCheck, Ruler, ShieldCheck, Truck } from "lucide-react";
+import { PackageCheck, Ruler, ShieldCheck, Truck } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { formatAed, products } from "@/data/products";
 import { useCart } from "@/lib/cart-store";
-import type { LensSelection, Product } from "@/types/commerce";
+import type { CoverCustomization, LensSelection, Product } from "@/types/commerce";
+import { CoverAddOnSelector } from "./CoverCustomization";
 import { LensSelectionModal } from "./LensSelectionModal";
 import { PriceDisplay } from "./PriceDisplay";
 import { ProductCard } from "./ProductCard";
@@ -16,6 +17,7 @@ export function ProductDetailView({ product }: { product: Product }) {
   const [size, setSize] = useState(product.sizes[0]);
   const [lensOpen, setLensOpen] = useState(false);
   const [notice, setNotice] = useState("");
+  const [coverCustomization, setCoverCustomization] = useState<CoverCustomization | undefined>();
   const frameColor = product.colors[0]?.name ?? "Default";
 
   const related = useMemo(
@@ -33,8 +35,9 @@ export function ProductDetailView({ product }: { product: Product }) {
       frameSize: size,
       quantity: 1,
       framePrice: product.price,
-      totalPrice: product.price + selection.lensPrice,
+      totalPrice: product.price + selection.lensPrice + (coverCustomization?.additionalPrice ?? 0),
       lensSelection: selection,
+      coverCustomization,
     });
     setNotice("Lens selection added to cart.");
   }
@@ -89,6 +92,11 @@ export function ProductDetailView({ product }: { product: Product }) {
                   ))}
                 </div>
               </div>
+              <CoverAddOnSelector
+                options={product.coverOptions}
+                value={coverCustomization}
+                onChange={setCoverCustomization}
+              />
             </div>
 
             <div className="mt-7 grid gap-3">
@@ -96,9 +104,6 @@ export function ProductDetailView({ product }: { product: Product }) {
                 Add to Cart
               </button>
             </div>
-            <button className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-ink/15 bg-white text-sm font-bold uppercase tracking-[0.14em]">
-              <Heart size={17} /> Wishlist
-            </button>
             {notice ? (
               <div className="mt-4 flex items-center justify-between gap-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800" role="status">
                 <span>{notice}</span>
@@ -150,7 +155,7 @@ export function ProductDetailView({ product }: { product: Product }) {
         <div className="mx-auto flex max-w-xl items-center gap-3">
           <div className="min-w-0 flex-1">
             <p className="text-xs text-ink/55">From</p>
-            <p className="font-bold">{formatAed(product.price)}</p>
+            <p className="font-bold">{formatAed(product.price + (coverCustomization?.additionalPrice ?? 0))}</p>
           </div>
           <button onClick={() => setLensOpen(true)} className="min-h-12 rounded-full bg-ink px-5 text-xs font-bold uppercase tracking-[0.14em] text-ivory">
             Add to Cart
@@ -163,6 +168,7 @@ export function ProductDetailView({ product }: { product: Product }) {
           product={product}
           frameColor={frameColor}
           frameSize={size}
+          coverCustomization={coverCustomization}
           onClose={() => setLensOpen(false)}
           onComplete={addWithLens}
         />

@@ -16,6 +16,7 @@ const CART_KEY = "billbird-cart-v1";
 interface CartTotals {
   subtotal: number;
   lensCharges: number;
+  coverCharges: number;
   shipping: number;
   vat: number;
   discount: number;
@@ -36,8 +37,12 @@ interface CartContextValue {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-function calculateItemTotal(item: Pick<CartItem, "framePrice" | "quantity" | "lensSelection">) {
-  return (item.framePrice + (item.lensSelection?.lensPrice ?? 0)) * item.quantity;
+function calculateItemTotal(item: Pick<CartItem, "framePrice" | "quantity" | "lensSelection" | "coverCustomization">) {
+  return (
+    item.framePrice +
+    (item.lensSelection?.lensPrice ?? 0) +
+    (item.coverCustomization?.additionalPrice ?? 0)
+  ) * item.quantity;
 }
 
 function calculateTotals(items: CartItem[]): CartTotals {
@@ -46,14 +51,19 @@ function calculateTotals(items: CartItem[]): CartTotals {
     (sum, item) => sum + (item.lensSelection?.lensPrice ?? 0) * item.quantity,
     0,
   );
+  const coverCharges = items.reduce(
+    (sum, item) => sum + (item.coverCustomization?.additionalPrice ?? 0) * item.quantity,
+    0,
+  );
   const quantity = items.reduce((sum, item) => sum + item.quantity, 0);
-  const discount = subtotal + lensCharges > 900 ? 50 : 0;
-  const shipping = subtotal + lensCharges > 500 || quantity === 0 ? 0 : 25;
-  const taxable = Math.max(0, subtotal + lensCharges + shipping - discount);
+  const merchandiseTotal = subtotal + lensCharges + coverCharges;
+  const discount = merchandiseTotal > 900 ? 50 : 0;
+  const shipping = merchandiseTotal > 500 || quantity === 0 ? 0 : 25;
+  const taxable = Math.max(0, merchandiseTotal + shipping - discount);
   const vat = Math.round(taxable * 0.05);
   const total = taxable + vat;
 
-  return { subtotal, lensCharges, shipping, vat, discount, total, quantity };
+  return { subtotal, lensCharges, coverCharges, shipping, vat, discount, total, quantity };
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {

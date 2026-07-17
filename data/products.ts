@@ -1,4 +1,4 @@
-import type { LensPackage, Product } from "@/types/commerce";
+import type { LensPackage, Product, ProductCoverOptions } from "@/types/commerce";
 
 const img = (index: number) =>
   `/images/billbird/billbird_placeholder_${String(index).padStart(2, "0")}.webp`;
@@ -18,8 +18,38 @@ const product06 = (file: string) =>
 const product07 = (file: string) =>
   `/products/Product_07_BillBird_Clear_Green_Spectacles/${encodeURIComponent(file)}`;
 
+const defaultCoverOptions: ProductCoverOptions = {
+  standardCoverIncluded: true,
+  customizationAvailable: true,
+  covers: [
+    {
+      id: "billbird-custom-cover",
+      name: "BillBirD Custom Cover",
+      mockupImage: img(4),
+      colors: [
+        { id: "black", name: "Black", value: "#0b0b0b", inStock: true },
+        { id: "brown", name: "Brown", value: "#5a2e1d", mockupImage: img(4), inStock: true },
+        { id: "navy", name: "Navy", value: "#101d35", inStock: true },
+        { id: "beige", name: "Beige", value: "#d9c8ad", inStock: true },
+      ],
+    },
+  ],
+  pricing: {
+    basePrice: 20,
+    photoPrice: 10,
+    engravingPrice: 10,
+    photoAndTextPrice: 15,
+  },
+  engravingCharacterLimit: 20,
+};
+
+const withDefaultCover = (product: Product): Product => ({
+  ...product,
+  coverOptions: defaultCoverOptions,
+});
+
 export const products: Product[] = [
-  {
+  withDefaultCover({
     id: "bb-001",
     slug: "black-spectacles",
     name: "BillBirD Black Spectacles",
@@ -63,8 +93,8 @@ export const products: Product[] = [
     rating: 4.8,
     dimensions: { lensWidth: 52, bridgeWidth: 19, templeLength: 145, weight: "28g" },
     highlights: ["Gloss black acetate", "Gold BillBirD temple branding", "Daily comfort fit"],
-  },
-  {
+  }),
+  withDefaultCover({
     id: "bb-002",
     slug: "clear-yellow-spectacles",
     name: "BillBirD Clear Yellow Spectacles",
@@ -107,8 +137,8 @@ export const products: Product[] = [
     rating: 4.6,
     dimensions: { lensWidth: 53, bridgeWidth: 18, templeLength: 142, weight: "27g" },
     highlights: ["Crystal clear acetate", "Yellow accent lens", "Gold BillBirD branding"],
-  },
-  {
+  }),
+  withDefaultCover({
     id: "bb-003",
     slug: "amber-spectacles",
     name: "BillBirD Amber Spectacles",
@@ -152,8 +182,8 @@ export const products: Product[] = [
     rating: 4.7,
     dimensions: { lensWidth: 55, bridgeWidth: 19, templeLength: 145, weight: "31g" },
     highlights: ["Warm amber acetate", "Rose-tinted lens", "Luxury case included"],
-  },
-  {
+  }),
+  withDefaultCover({
     id: "bb-004",
     slug: "amber-brown-spectacles",
     name: "BillBirD Amber Brown Spectacles",
@@ -185,8 +215,8 @@ export const products: Product[] = [
     rating: 4.7,
     dimensions: { lensWidth: 54, bridgeWidth: 19, templeLength: 145, weight: "30g" },
     highlights: ["Amber brown acetate", "Warm luxury tint", "Gold BillBirD detail"],
-  },
-  {
+  }),
+  withDefaultCover({
     id: "bb-005",
     slug: "clear-green-spectacles",
     name: "BillBirD Clear Green Spectacles",
@@ -218,8 +248,8 @@ export const products: Product[] = [
     rating: 4.6,
     dimensions: { lensWidth: 52, bridgeWidth: 18, templeLength: 142, weight: "26g" },
     highlights: ["Clear acetate body", "Green accent lens", "Lightweight everyday fit"],
-  },
-  {
+  }),
+  withDefaultCover({
     id: "bb-006",
     slug: "custom-cover-edition",
     name: "BillBirD Custom Cover Edition",
@@ -241,8 +271,8 @@ export const products: Product[] = [
     prescriptionAvailable: true,
     dimensions: { lensWidth: 53, bridgeWidth: 19, templeLength: 145, weight: "34g" },
     highlights: ["Personalized cover", "Luxury finish", "Gift-ready package"],
-  },
-  {
+  }),
+  withDefaultCover({
     id: "bb-007",
     slug: "mini-crystal-kids",
     name: "BillBirD Mini Crystal Kids",
@@ -264,8 +294,8 @@ export const products: Product[] = [
     prescriptionAvailable: true,
     dimensions: { lensWidth: 45, bridgeWidth: 16, templeLength: 130, weight: "21g" },
     highlights: ["Lightweight", "Comfort temple", "Prescription ready"],
-  },
-  {
+  }),
+  withDefaultCover({
     id: "bb-008",
     slug: "limited-atelier-duo",
     name: "BillBirD Limited Atelier Duo",
@@ -290,7 +320,7 @@ export const products: Product[] = [
     rating: 4.9,
     dimensions: { lensWidth: 54, bridgeWidth: 19, templeLength: 146, weight: "33g" },
     highlights: ["Limited finish", "Two-tone styling", "Collector case"],
-  },
+  }),
 ];
 
 export const lensPackages: LensPackage[] = [
