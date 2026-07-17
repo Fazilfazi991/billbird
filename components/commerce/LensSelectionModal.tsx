@@ -21,7 +21,7 @@ import {
   prescriptionStatusText,
 } from "@/lib/prescription-format";
 import type { CoverCustomization, LensPackage, LensSelection, PowerType, PrescriptionData, Product } from "@/types/commerce";
-import { CoverCustomizationSummary } from "./CoverCustomization";
+import { CoverAddOnSelector, CoverCustomizationPreview, CoverCustomizationSummary } from "./CoverCustomization";
 
 const sphValues = Array.from({ length: 81 }, (_, index) => (8 - index * 0.25).toFixed(2));
 const cylValues = Array.from({ length: 25 }, (_, index) => (0 - index * 0.25).toFixed(2));
@@ -35,16 +35,14 @@ export function LensSelectionModal({
   product,
   frameColor,
   frameSize,
-  coverCustomization,
   onClose,
   onComplete,
 }: {
   product: Product;
   frameColor: string;
   frameSize: string;
-  coverCustomization?: CoverCustomization;
   onClose: () => void;
-  onComplete: (selection: LensSelection) => void;
+  onComplete: (selection: LensSelection, coverCustomization?: CoverCustomization) => void;
 }) {
   const router = useRouter();
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -59,6 +57,7 @@ export function LensSelectionModal({
   const [loadingLens, setLoadingLens] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<LensPackage | null>(null);
   const [prescription, setPrescription] = useState<PrescriptionData>(emptyPrescription("submit-later"));
+  const [coverCustomization, setCoverCustomization] = useState<CoverCustomization | undefined>();
   const [errors, setErrors] = useState<string[]>([]);
   const [detailsOpen, setDetailsOpen] = useState<string | null>(null);
 
@@ -125,7 +124,9 @@ export function LensSelectionModal({
     if (cartStatus === "success") return "Added to Cart";
     if (step === 1) return "Select Lens Type";
     if (step === 2) return "Choose Your Lens";
-    return "Add Your Prescription";
+    if (step === 3) return "Add Your Prescription";
+    if (step === 4) return "Choose Your Cover";
+    return "Review Selection";
   }, [cartStatus, step]);
 
   function hasEnteredPrescription() {
@@ -205,7 +206,7 @@ export function LensSelectionModal({
         lensPackageName: lensToAdd.name,
         lensPrice: lensToAdd.price,
         prescription: powerType === "without-power" ? { method: "not-required" } : prescription,
-      });
+      }, coverCustomization);
       setCartStatus("success");
       setShowToast(true);
       window.setTimeout(() => setShowToast(false), 3000);
@@ -232,13 +233,26 @@ export function LensSelectionModal({
         return;
       }
 
-      void addConfiguredProductToCart(lens);
+      setStep(4);
+      setProcessingSelection(false);
+      scrollDrawerToTop();
     }, 250);
   }
 
   function continueFlow() {
     setErrors([]);
-    if (step === 3) void addConfiguredProductToCart();
+    if (step === 3) {
+      if (!validatePrescription()) return;
+      setStep(4);
+      scrollDrawerToTop();
+      return;
+    }
+    if (step === 4) {
+      setStep(5);
+      scrollDrawerToTop();
+      return;
+    }
+    if (step === 5) void addConfiguredProductToCart();
   }
 
   function handlePrescriptionMethodSelect(method: PrescriptionData["method"]) {
@@ -264,9 +278,17 @@ export function LensSelectionModal({
     });
   }
 
-  const canContinue = step === 3 && Boolean(prescription.method);
+  const canContinue =
+    (step === 3 && Boolean(prescription.method)) ||
+    step === 4 ||
+    step === 5;
 
-  const buttonLabel = cartStatus === "loading" ? "Adding to Cart..." : "Add to Cart";
+  const buttonLabel =
+    cartStatus === "loading"
+      ? "Adding to Cart..."
+      : step === 5
+        ? "Add to Cart"
+        : "Continue";
   const coverPrice = coverCustomization?.additionalPrice ?? 0;
   const totalPrice = product.price + (selectedPackage?.price ?? 0) + coverPrice;
   const powerTypeLabel = powerType === "with-power" ? "With Power" : "Without Power";
@@ -324,15 +346,15 @@ export function LensSelectionModal({
           </div>
 
           {cartStatus !== "success" ? (
-            <div className="mt-5 grid grid-cols-3 gap-2 text-center text-[0.64rem] font-bold uppercase tracking-[0.1em]">
-              {["Power Type", "Lenses", "Add Power"].map((label, index) => {
+            <div className="mt-5 grid grid-cols-4 gap-2 text-center text-[0.6rem] font-bold uppercase tracking-[0.08em]">
+              {["Power Type", "Lenses", "Add Power", "Cover"].map((label, index) => {
                 const itemStep = index + 1;
                 const complete = step > itemStep;
                 return (
                   <button
                     key={label}
                     type="button"
-                    disabled={itemStep > step || processingSelection}
+                    disabled={itemStep > step || processingSelection || cartStatus === "loading"}
                     onClick={() => itemStep < step && setStep(itemStep)}
                     aria-current={step === itemStep ? "step" : undefined}
                     className={`min-h-10 rounded-full border px-2 transition ${
@@ -432,7 +454,6 @@ export function LensSelectionModal({
                 </p>
               </div>
             </div>
-            <CoverCustomizationSummary customization={coverCustomization} compact />
           </div>
 
           {step === 1 ? (
@@ -654,6 +675,87 @@ export function LensSelectionModal({
             </section>
           ) : null}
 
+          {step === 4 ? (
+            <section className="mt-6 space-y-5">
+              <h3 className="font-serif text-3xl">Choose Your Cover</h3>
+              <p className="text-sm leading-6 text-ink/58">
+                Select the included standard cover or add a customized BillBirD cover after your lens selection.
+              </p>
+              <CoverAddOnSelector
+                options={product.coverOptions}
+                value={coverCustomization}
+                onChange={setCoverCustomization}
+              />
+            </section>
+          ) : null}
+
+          {step === 5 ? (
+            <section className="mt-6 space-y-5">
+              <h3 className="font-serif text-3xl">Review Selection</h3>
+              <div className="rounded-[14px] border border-ink/10 bg-white p-4">
+                <div className="flex gap-4">
+                  <img src={product.images[0]} alt={product.name} className="size-20 rounded-lg object-cover" />
+                  <div className="min-w-0">
+                    <p className="font-serif text-2xl leading-tight">{product.name}</p>
+                    <p className="mt-1 text-sm text-ink/58">Frame Color: {frameColor}</p>
+                    <p className="text-sm text-ink/58">Frame Size: {frameSize}</p>
+                    <p className="text-sm text-ink/58">Power Type: {powerTypeLabel}</p>
+                    <p className="text-sm text-ink/58">Lens Package: {selectedPackage?.name}</p>
+                  </div>
+                </div>
+                <div className="mt-4 rounded-lg bg-ivory p-3 text-sm leading-6 text-ink/65">
+                  <p>
+                    <strong className="text-ink">Prescription:</strong>{" "}
+                    {prescriptionMethodLabel(powerType === "without-power" ? "not-required" : prescription.method)}
+                  </p>
+                  {powerType === "with-power" && prescription.method === "manual" ? (
+                    <>
+                      <p><strong className="text-ink">Right / OD:</strong> {formatEyePrescription(prescription.rightEye)}</p>
+                      <p><strong className="text-ink">Left / OS:</strong> {formatEyePrescription(prescription.leftEye)}</p>
+                    </>
+                  ) : (
+                    <p>{prescriptionStatusText(powerType === "without-power" ? { method: "not-required" } : prescription)}</p>
+                  )}
+                </div>
+                <CoverCustomizationSummary customization={coverCustomization} compact />
+              </div>
+
+              {coverCustomization?.enabled ? (
+                <CoverCustomizationPreview customization={coverCustomization} />
+              ) : null}
+
+              <div className="rounded-[14px] border border-ink/10 bg-white p-4 text-sm">
+                <div className="flex justify-between gap-4">
+                  <span className="text-ink/58">Frame price</span>
+                  <strong>{formatAed(product.price)}</strong>
+                </div>
+                <div className="mt-2 flex justify-between gap-4">
+                  <span className="text-ink/58">Lens price</span>
+                  <strong>{formatAed(selectedPackage?.price ?? 0)}</strong>
+                </div>
+                <div className="mt-2 flex justify-between gap-4">
+                  <span className="text-ink/58">Cover add-on</span>
+                  <strong>{formatAed(coverPrice)}</strong>
+                </div>
+                <div className="mt-4 flex justify-between border-t border-ink/10 pt-4 text-lg font-bold">
+                  <span>Final total</span>
+                  <span>{formatAed(totalPrice)}</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setStep(4);
+                  scrollDrawerToTop();
+                }}
+                className="min-h-11 w-full rounded-full border border-ink/15 bg-white px-5 text-xs font-bold uppercase tracking-[0.14em]"
+              >
+                Back to Edit Cover
+              </button>
+            </section>
+          ) : null}
+
           {errors.length ? (
             <div className="mt-5 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700" role="alert">
               {errors.map((error) => <p key={error}>{error}</p>)}
@@ -682,7 +784,7 @@ export function LensSelectionModal({
             <span className="text-ink/58">Frame + lens + cover</span>
             <strong>{formatAed(totalPrice)}</strong>
           </div>
-          {step === 3 ? (
+          {step >= 3 ? (
             <button
               onClick={continueFlow}
               disabled={!canContinue || loadingLens || processingSelection || cartStatus === "loading"}

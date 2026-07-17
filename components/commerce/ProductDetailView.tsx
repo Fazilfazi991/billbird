@@ -6,7 +6,6 @@ import { useMemo, useState } from "react";
 import { formatAed, products } from "@/data/products";
 import { useCart } from "@/lib/cart-store";
 import type { CoverCustomization, LensSelection, Product } from "@/types/commerce";
-import { CoverAddOnSelector } from "./CoverCustomization";
 import { LensSelectionModal } from "./LensSelectionModal";
 import { PriceDisplay } from "./PriceDisplay";
 import { ProductCard } from "./ProductCard";
@@ -17,7 +16,6 @@ export function ProductDetailView({ product }: { product: Product }) {
   const [size, setSize] = useState(product.sizes[0]);
   const [lensOpen, setLensOpen] = useState(false);
   const [notice, setNotice] = useState("");
-  const [coverCustomization, setCoverCustomization] = useState<CoverCustomization | undefined>();
   const frameColor = product.colors[0]?.name ?? "Default";
 
   const related = useMemo(
@@ -25,7 +23,7 @@ export function ProductDetailView({ product }: { product: Product }) {
     [product],
   );
 
-  function addWithLens(selection: LensSelection) {
+  function addWithLens(selection: LensSelection, coverCustomization?: CoverCustomization) {
     addItem({
       productId: product.id,
       productSlug: product.slug,
@@ -92,11 +90,6 @@ export function ProductDetailView({ product }: { product: Product }) {
                   ))}
                 </div>
               </div>
-              <CoverAddOnSelector
-                options={product.coverOptions}
-                value={coverCustomization}
-                onChange={setCoverCustomization}
-              />
             </div>
 
             <div className="mt-7 grid gap-3">
@@ -155,7 +148,7 @@ export function ProductDetailView({ product }: { product: Product }) {
         <div className="mx-auto flex max-w-xl items-center gap-3">
           <div className="min-w-0 flex-1">
             <p className="text-xs text-ink/55">From</p>
-            <p className="font-bold">{formatAed(product.price + (coverCustomization?.additionalPrice ?? 0))}</p>
+            <p className="font-bold">{formatAed(product.price)}</p>
           </div>
           <button onClick={() => setLensOpen(true)} className="min-h-12 rounded-full bg-ink px-5 text-xs font-bold uppercase tracking-[0.14em] text-ivory">
             Add to Cart
@@ -168,7 +161,6 @@ export function ProductDetailView({ product }: { product: Product }) {
           product={product}
           frameColor={frameColor}
           frameSize={size}
-          coverCustomization={coverCustomization}
           onClose={() => setLensOpen(false)}
           onComplete={addWithLens}
         />
