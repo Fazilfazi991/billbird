@@ -37,8 +37,10 @@ export function LensSelectionModal({
   onComplete: (selection: LensSelection) => void;
 }) {
   const drawerRef = useRef<HTMLDivElement>(null);
+  const drawerContentRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(1);
   const [powerType, setPowerType] = useState<PowerType | null>(null);
+  const [advancingPowerType, setAdvancingPowerType] = useState(false);
   const [lensOptions, setLensOptions] = useState<LensPackage[]>([]);
   const [loadingLens, setLoadingLens] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<LensPackage | null>(null);
@@ -151,6 +153,28 @@ export function LensSelectionModal({
     }));
   }
 
+  function scrollDrawerToTop() {
+    drawerContentRef.current?.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  function handlePowerTypeSelect(type: PowerType) {
+    if (advancingPowerType) return;
+
+    setPowerType(type);
+    setAdvancingPowerType(true);
+    setPrescription(emptyPrescription(type === "without-power" ? "not-required" : "submit-later"));
+    setErrors([]);
+
+    window.setTimeout(() => {
+      setStep(2);
+      setAdvancingPowerType(false);
+      scrollDrawerToTop();
+    }, 250);
+  }
+
   function completeSelection() {
     if (!powerType || !selectedPackage) return;
     if (powerType === "with-power" && !validatePrescription()) return;
@@ -166,16 +190,17 @@ export function LensSelectionModal({
 
   function continueFlow() {
     setErrors([]);
-    if (step === 1 && powerType) setStep(2);
     if (step === 2 && selectedPackage) {
       if (powerType === "without-power") completeSelection();
-      else setStep(3);
+      else {
+        setStep(3);
+        window.setTimeout(scrollDrawerToTop, 0);
+      }
     }
     if (step === 3) completeSelection();
   }
 
   const canContinue =
-    (step === 1 && Boolean(powerType)) ||
     (step === 2 && Boolean(selectedPackage)) ||
     (step === 3 && Boolean(prescription.method));
 
@@ -249,7 +274,7 @@ export function LensSelectionModal({
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto overflow-x-hidden px-5 py-6 pb-32">
+        <div ref={drawerContentRef} className="flex-1 overflow-y-auto overflow-x-hidden px-5 py-6 pb-32">
           <div className="rounded-[14px] border border-ink/10 bg-white p-3">
             <div className="flex items-center gap-3">
               <img src={product.images[0]} alt="" className="size-16 rounded-lg object-cover" />
@@ -282,12 +307,10 @@ export function LensSelectionModal({
                 ].map(({ type, title, text, Icon }) => (
                   <button
                     key={type}
-                    onClick={() => {
-                      setPowerType(type);
-                      setPrescription(emptyPrescription(type === "without-power" ? "not-required" : "submit-later"));
-                    }}
+                    onClick={() => handlePowerTypeSelect(type)}
+                    disabled={advancingPowerType}
                     className={`flex min-h-24 items-center gap-4 rounded-[14px] border bg-white p-4 text-start shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-soft ${
-                      powerType === type ? "border-gold ring-2 ring-gold/25" : "border-ink/10"
+                      powerType === type ? "border-gold bg-gold/10 ring-2 ring-gold/25" : "border-ink/10"
                     }`}
                   >
                     <span className="grid size-12 shrink-0 place-items-center rounded-full bg-bone text-leather">
@@ -297,7 +320,11 @@ export function LensSelectionModal({
                       <span className="block font-serif text-2xl">{title}</span>
                       <span className="mt-1 block text-sm text-ink/58">{text}</span>
                     </span>
-                    <ChevronRight size={20} />
+                    {powerType === type && advancingPowerType ? (
+                      <Check className="text-gold" size={20} />
+                    ) : (
+                      <ChevronRight size={20} />
+                    )}
                   </button>
                 ))}
               </div>
@@ -475,13 +502,15 @@ export function LensSelectionModal({
             <span className="text-ink/58">Frame + lens</span>
             <strong>{formatAed(product.price + (selectedPackage?.price ?? 0))}</strong>
           </div>
-          <button
-            onClick={continueFlow}
-            disabled={!canContinue || loadingLens}
-            className="min-h-12 w-full rounded-full bg-ink px-5 text-sm font-bold uppercase tracking-[0.14em] text-ivory transition hover:bg-leather disabled:cursor-not-allowed disabled:opacity-45"
-          >
-            {buttonLabel}
-          </button>
+          {step > 1 ? (
+            <button
+              onClick={continueFlow}
+              disabled={!canContinue || loadingLens}
+              className="min-h-12 w-full rounded-full bg-ink px-5 text-sm font-bold uppercase tracking-[0.14em] text-ivory transition hover:bg-leather disabled:cursor-not-allowed disabled:opacity-45"
+            >
+              {buttonLabel}
+            </button>
+          ) : null}
         </footer>
       </motion.aside>
     </AnimatePresence>
