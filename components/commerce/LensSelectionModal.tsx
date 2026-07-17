@@ -50,6 +50,7 @@ export function LensSelectionModal({
   const [step, setStep] = useState(1);
   const [powerType, setPowerType] = useState<PowerType | null>(null);
   const [advancingPowerType, setAdvancingPowerType] = useState(false);
+  const [advancingPrescriptionMethod, setAdvancingPrescriptionMethod] = useState(false);
   const [processingSelection, setProcessingSelection] = useState(false);
   const [cartStatus, setCartStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [showToast, setShowToast] = useState(false);
@@ -241,12 +242,6 @@ export function LensSelectionModal({
 
   function continueFlow() {
     setErrors([]);
-    if (step === 3) {
-      if (!validatePrescription()) return;
-      setStep(4);
-      scrollDrawerToTop();
-      return;
-    }
     if (step === 4) {
       setStep(5);
       scrollDrawerToTop();
@@ -256,6 +251,7 @@ export function LensSelectionModal({
   }
 
   function handlePrescriptionMethodSelect(method: PrescriptionData["method"]) {
+    if (advancingPrescriptionMethod) return;
     setErrors([]);
     setPrescription((current) => {
       if (current.method === method) return current;
@@ -276,10 +272,29 @@ export function LensSelectionModal({
       }
       return emptyPrescription(method);
     });
+    if (method === "submit-later") {
+      setAdvancingPrescriptionMethod(true);
+      window.setTimeout(() => {
+        setStep(4);
+        setAdvancingPrescriptionMethod(false);
+        scrollDrawerToTop();
+      }, 220);
+    }
+  }
+
+  function advanceToCoverFromPower() {
+    setStep(4);
+    setAdvancingPrescriptionMethod(false);
+    scrollDrawerToTop();
+  }
+
+  function saveManualPrescription() {
+    if (!validatePrescription()) return;
+    setAdvancingPrescriptionMethod(true);
+    window.setTimeout(advanceToCoverFromPower, 220);
   }
 
   const canContinue =
-    (step === 3 && Boolean(prescription.method)) ||
     step === 4 ||
     step === 5;
 
@@ -291,6 +306,7 @@ export function LensSelectionModal({
         : "Continue";
   const coverPrice = coverCustomization?.additionalPrice ?? 0;
   const totalPrice = product.price + (selectedPackage?.price ?? 0) + coverPrice;
+  const frameLensPrice = product.price + (selectedPackage?.price ?? 0);
   const powerTypeLabel = powerType === "with-power" ? "With Power" : "Without Power";
 
   return (
@@ -450,7 +466,7 @@ export function LensSelectionModal({
               <div>
                 <p className="font-serif text-xl leading-tight">{product.name}</p>
                 <p className="mt-1 text-xs text-ink/55">
-                  {frameColor} / {frameSize} / {formatAed(product.price + coverPrice)}
+                  {frameColor} / {frameSize} / {formatAed(step >= 4 ? totalPrice : frameLensPrice)}
                 </p>
               </div>
             </div>
@@ -584,12 +600,18 @@ export function LensSelectionModal({
                   <button
                     key={option.method}
                     onClick={() => handlePrescriptionMethodSelect(option.method as PrescriptionData["method"])}
+                    disabled={advancingPrescriptionMethod}
                     className={`min-h-20 rounded-[14px] border bg-white p-4 text-start shadow-sm transition hover:-translate-y-0.5 ${
                       prescription.method === option.method ? "border-gold ring-2 ring-gold/25" : "border-ink/10"
                     }`}
                   >
-                    <span className="block font-serif text-2xl">{option.title}</span>
-                    <span className="mt-1 block text-sm text-ink/58">{option.text}</span>
+                    <span className="flex items-start justify-between gap-3">
+                      <span>
+                        <span className="block font-serif text-2xl">{option.title}</span>
+                        <span className="mt-1 block text-sm text-ink/58">{option.text}</span>
+                      </span>
+                      {prescription.method === option.method ? <Check className="shrink-0 text-gold" size={20} /> : null}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -614,6 +636,8 @@ export function LensSelectionModal({
                         ...current,
                         uploadedFile: { name: file.name, type: file.type, size: file.size },
                       }));
+                      setAdvancingPrescriptionMethod(true);
+                      window.setTimeout(advanceToCoverFromPower, 220);
                     }}
                   />
                   {prescription.uploadedFile ? (
@@ -670,6 +694,14 @@ export function LensSelectionModal({
                   <label className="mt-5 block text-sm">Notes
                     <textarea className="mt-1 min-h-24 w-full rounded-lg border border-ink/15 p-3" value={prescription.notes ?? ""} onChange={(event) => setPrescription((current) => ({ ...current, notes: event.target.value }))} />
                   </label>
+                  <button
+                    type="button"
+                    onClick={saveManualPrescription}
+                    disabled={advancingPrescriptionMethod}
+                    className="mt-5 min-h-11 w-full rounded-full bg-ink px-5 text-xs font-bold uppercase tracking-[0.14em] text-ivory disabled:opacity-50"
+                  >
+                    {advancingPrescriptionMethod ? "Saving..." : "Save Prescription"}
+                  </button>
                 </div>
               ) : null}
             </section>
@@ -781,10 +813,10 @@ export function LensSelectionModal({
         {cartStatus !== "success" ? (
         <footer className="sticky bottom-0 border-t border-ink/10 bg-ivory/96 p-5 backdrop-blur">
           <div className="mb-3 flex items-center justify-between gap-4 text-sm">
-            <span className="text-ink/58">Frame + lens + cover</span>
-            <strong>{formatAed(totalPrice)}</strong>
+            <span className="text-ink/58">{step >= 4 ? "Frame + lens + cover" : "Frame + lens"}</span>
+            <strong>{formatAed(step >= 4 ? totalPrice : frameLensPrice)}</strong>
           </div>
-          {step >= 3 ? (
+          {step >= 4 ? (
             <button
               onClick={continueFlow}
               disabled={!canContinue || loadingLens || processingSelection || cartStatus === "loading"}
