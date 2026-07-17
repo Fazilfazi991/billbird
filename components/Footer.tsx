@@ -1,9 +1,17 @@
 import { brand } from "@/data/site";
 
 const columns = {
-  Shop: ["Optical Frames", "Sunglasses", "Custom Covers", "New Collection"],
-  Brand: ["About", "Vision", "Mission"],
-  Support: ["Contact", "WhatsApp", "Instagram", "Email"],
+  Shop: [
+    ["Optical Frames", "/products"],
+    ["Sunglasses", "/products"],
+    ["Custom Covers", "/#customization"],
+    ["New Collection", "/products"],
+  ],
+  Brand: [
+    ["About", "/#about"],
+    ["Vision", "/#about"],
+    ["Mission", "/#about"],
+  ],
 };
 
 export function Footer() {
@@ -19,16 +27,16 @@ export function Footer() {
             />
             <p className="-mt-1 max-w-sm text-sm leading-7 text-ivory/58 md:-mt-2">{brand.tagline}</p>
           </div>
-          <div className="grid gap-8 sm:grid-cols-3 md:pt-1">
+          <div className="grid gap-8 sm:grid-cols-2 md:pt-1">
             {Object.entries(columns).map(([title, links]) => (
               <div key={title}>
                 <h3 className="mb-4 text-[0.72rem] font-bold uppercase tracking-[0.16em] text-gold">
                   {title}
                 </h3>
                 <div className="grid gap-2 text-sm text-ivory/62">
-                  {links.map((link) => (
-                    <a href="#contact" key={link} className="hover:text-ivory">
-                      {link}
+                  {links.map(([label, href]) => (
+                    <a href={href} key={label} className="hover:text-ivory">
+                      {label}
                     </a>
                   ))}
                 </div>

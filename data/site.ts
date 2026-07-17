@@ -9,6 +9,10 @@ export const brand = {
   linkedIn: "Linkedin/BillBirD",
   youtube: "BillBird_ae",
   facebook: "BillBird_ae",
+  address: "Al Karama, Dubai, United Arab Emirates",
+  mapUrl:
+    "https://www.google.com/maps?gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIRCAEQABgKGAsYsQMYyQMYgAQyCAgCEAAYAxgKMgsIAxAAGAoYCxiABDILCAQQABgKGAsYgAQyCwgFEAAYChgLGIAEMgsIBhAAGAoYCxiABDILCAcQABgKGAsYgAQyCwgIEAAYChgLGIAEMgsICRAAGAoYCxiABNIBCDI4MTZqMGo5qAIGsAIB8QX2lqr6rOhI7g&um=1&ie=UTF-8&fb=1&gl=ae&sa=X&geocode=KeFDU12BQ18-MUP2VG0fw-jD&daddr=Al+Karama+-+Dubai",
+  mapEmbedUrl: "https://www.google.com/maps?q=Al%20Karama%2C%20Dubai&output=embed",
 };
 
 export const navLinks = [
@@ -17,7 +21,7 @@ export const navLinks = [
   { label: "Collection", href: "/products" },
   { label: "Customization", href: "/#customization" },
   { label: "Signature Designs", href: "/#signature" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const collections = [
