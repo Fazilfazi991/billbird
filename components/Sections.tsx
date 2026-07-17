@@ -93,7 +93,7 @@ export function CollectionCards() {
                 alt={`${featuredProducts[index]?.name ?? item.title} by BillBirD`}
                 className="aspect-[4/3] bg-white"
                 imageClassName="group-hover:scale-105"
-                fit="contain"
+                fit="cover"
               />
               <div className="p-5 md:p-6">
                 <h3 className="font-serif text-2xl md:text-3xl">{item.title}</h3>
@@ -250,7 +250,7 @@ export function ProductGrid() {
                   alt={`${product.name} ${product.frameType}`}
                   className="aspect-[4/3] bg-white"
                   imageClassName="group-hover:scale-105"
-                  fit="contain"
+                  fit="cover"
                 />
               </Link>
               <div className="p-4 text-center">
