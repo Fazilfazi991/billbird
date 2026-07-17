@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { ScrollAnimations } from "@/components/ScrollAnimations";
 import { CartProvider } from "@/lib/cart-store";
 import "./globals.css";
@@ -20,6 +21,7 @@ export default function RootLayout({
         <CartProvider>
           <ScrollAnimations />
           {children}
+          <FloatingWhatsApp />
         </CartProvider>
       </body>
     </html>

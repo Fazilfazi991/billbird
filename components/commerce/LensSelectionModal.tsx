@@ -187,8 +187,9 @@ export function LensSelectionModal({
     }, 250);
   }
 
-  async function addConfiguredProductToCart() {
-    if (!powerType || !selectedPackage) return;
+  async function addConfiguredProductToCart(lensOverride?: LensPackage) {
+    const lensToAdd = lensOverride ?? selectedPackage;
+    if (!powerType || !lensToAdd) return;
     if (powerType === "with-power" && !validatePrescription()) return;
 
     try {
@@ -197,9 +198,9 @@ export function LensSelectionModal({
       await new Promise((resolve) => window.setTimeout(resolve, 220));
       onComplete({
         powerType,
-        lensPackageId: selectedPackage.id,
-        lensPackageName: selectedPackage.name,
-        lensPrice: selectedPackage.price,
+        lensPackageId: lensToAdd.id,
+        lensPackageName: lensToAdd.name,
+        lensPrice: lensToAdd.price,
         prescription: powerType === "without-power" ? { method: "not-required" } : prescription,
       });
       setCartStatus("success");
@@ -228,7 +229,7 @@ export function LensSelectionModal({
         return;
       }
 
-      void addConfiguredProductToCart();
+      void addConfiguredProductToCart(lens);
     }, 250);
   }
 
@@ -354,7 +355,7 @@ export function LensSelectionModal({
               </div>
               <h3 className="mt-5 font-serif text-4xl">Product Added to Cart</h3>
               <p className="mt-3 max-w-sm text-sm leading-6 text-ink/58">
-                Your BillBirD eyewear has been added to your cart.
+                Your selected frame and lens have been added to the cart.
               </p>
               <div className="mt-6 w-full rounded-[16px] border border-ink/10 bg-white p-4 text-start shadow-sm">
                 <div className="flex gap-4">
@@ -505,10 +506,19 @@ export function LensSelectionModal({
                             {item.price ? formatAed(item.price) : "Included"}
                           </span>
                         </span>
-                        {selectedPackage?.id === item.id ? <Check className="text-gold" size={20} /> : <ChevronRight size={20} />}
+                        {processingSelection && selectedPackage?.id === item.id && powerType === "without-power" ? (
+                          <span className="flex items-center gap-2 text-[0.64rem] font-bold uppercase tracking-[0.14em] text-leather">
+                            <Loader2 className="animate-spin" size={16} /> Adding to cart...
+                          </span>
+                        ) : selectedPackage?.id === item.id ? (
+                          <Check className="text-gold" size={20} />
+                        ) : (
+                          <ChevronRight size={20} />
+                        )}
                       </button>
                       <button
                         onClick={() => setDetailsOpen(detailsOpen === item.id ? null : item.id)}
+                        disabled={processingSelection}
                         className="mt-3 min-h-9 text-xs font-bold uppercase tracking-[0.14em] text-leather"
                         aria-expanded={detailsOpen === item.id}
                       >
@@ -647,7 +657,7 @@ export function LensSelectionModal({
           ) : null}
           {cartStatus === "error" && !errors.length ? (
             <div className="mt-5 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700" role="alert">
-              Unable to add product to cart. Please try again.
+              Unable to add this product to the cart.
               <button onClick={() => void addConfiguredProductToCart()} className="mt-3 block min-h-10 rounded-full bg-ink px-4 text-xs font-bold uppercase tracking-[0.12em] text-ivory">
                 Try Again
               </button>

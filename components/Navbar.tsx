@@ -1,7 +1,8 @@
 "use client";
 
-import { Heart, Instagram, Menu, MessageCircle, Search, ShoppingBag, User, X } from "lucide-react";
+import { Instagram, Menu, MessageCircle, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { brand, navLinks } from "@/data/site";
 import { useCart } from "@/lib/cart-store";
@@ -10,6 +11,9 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { totals, hydrated } = useCart();
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const solidNav = scrolled || !isHome;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
@@ -21,19 +25,19 @@ export function Navbar() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-ivory/94 text-ink shadow-sm backdrop-blur" : "text-ivory"
+        solidNav ? "bg-ivory/94 text-ink shadow-sm backdrop-blur" : "text-ivory"
       }`}
     >
-      <nav className="section-shell flex h-16 items-center justify-between gap-4 md:h-20 md:gap-5">
+      <nav className="section-shell flex h-20 items-center justify-between gap-4 pt-2 md:h-24 md:gap-6 md:pt-3">
         <Link href="/#home" className="flex items-center gap-3" aria-label="BillBirD home">
           <img
             src="/billbird-logo-transparent.webp"
             alt="BillBirD"
-            className="h-9 w-auto md:h-12"
+            className="h-11 w-auto md:h-14"
           />
         </Link>
 
-        <div className="hidden items-center gap-7 text-[0.72rem] font-bold uppercase tracking-[0.14em] lg:flex">
+        <div className="hidden items-center gap-8 text-[0.78rem] font-bold uppercase tracking-[0.16em] lg:flex">
           {navLinks.map((link) => (
             <Link key={link.href} href={link.href} className="transition hover:text-gold">
               {link.label}
@@ -41,35 +45,26 @@ export function Navbar() {
           ))}
         </div>
 
-        <div className="hidden items-center gap-3 lg:flex">
-          <Link href="/products" aria-label="Search products" className="rounded-full border border-current/20 p-2">
-            <Search size={17} />
-          </Link>
-          <Link href="/products" aria-label="Account" className="rounded-full border border-current/20 p-2">
-            <User size={17} />
-          </Link>
-          <Link href="/products" aria-label="Wishlist" className="rounded-full border border-current/20 p-2">
-            <Heart size={17} />
-          </Link>
-          <Link href="/cart" aria-label="Cart" className="relative rounded-full border border-current/20 p-2">
-            <ShoppingBag size={17} />
+        <div className="hidden items-center gap-3.5 lg:flex">
+          <Link href="/cart" aria-label="Cart" className="relative rounded-full border border-current/20 p-2.5">
+            <ShoppingBag size={18} />
             {hydrated && totals.quantity ? (
               <span className="absolute -end-1 -top-1 grid size-5 place-items-center rounded-full bg-gold text-[0.65rem] font-bold text-ink">
                 {totals.quantity}
               </span>
             ) : null}
           </Link>
-          <a href="#" aria-label="Instagram" className="rounded-full border border-current/20 p-2">
-            <Instagram size={17} />
+          <a href="#" aria-label="Instagram" className="rounded-full border border-current/20 p-2.5">
+            <Instagram size={18} />
           </a>
-          <a href={brand.whatsapp} className={scrolled ? "btn-dark" : "btn-primary"}>
-            <MessageCircle size={16} />
+          <a href={brand.whatsapp} className={solidNav ? "btn-dark" : "btn-primary"}>
+            <MessageCircle size={18} />
             Enquire
           </a>
         </div>
 
         <button
-          className="grid size-10 place-items-center rounded-full border border-current/25 lg:hidden"
+          className="grid size-11 place-items-center rounded-full border border-current/25 lg:hidden"
           onClick={() => setOpen(true)}
           aria-label="Open menu"
         >

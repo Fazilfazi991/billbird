@@ -2,7 +2,7 @@ import { brand } from "@/data/site";
 
 const columns = {
   Shop: ["Optical Frames", "Sunglasses", "Custom Covers", "New Collection"],
-  Brand: ["About", "Vision", "Mission", "Signature Designs"],
+  Brand: ["About", "Vision", "Mission"],
   Support: ["Contact", "WhatsApp", "Instagram", "Email"],
 };
 
@@ -10,16 +10,16 @@ export function Footer() {
   return (
     <footer className="bg-black py-10 text-ivory md:py-14">
       <div className="section-shell">
-        <div className="flex flex-col justify-between gap-8 border-b border-ivory/12 pb-10 md:flex-row">
-          <div>
+        <div className="flex flex-col items-start justify-between gap-8 border-b border-ivory/12 pb-10 md:flex-row md:items-start">
+          <div className="-mt-3 md:-mt-5">
             <img
               src="/billbird-logo-transparent-large.webp"
               alt="BillBirD"
               className="h-14 w-auto md:h-20"
             />
-            <p className="mt-3 max-w-sm text-sm leading-7 text-ivory/58">{brand.tagline}</p>
+            <p className="-mt-1 max-w-sm text-sm leading-7 text-ivory/58 md:-mt-2">{brand.tagline}</p>
           </div>
-          <div className="grid gap-8 sm:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-3 md:pt-1">
             {Object.entries(columns).map(([title, links]) => (
               <div key={title}>
                 <h3 className="mb-4 text-[0.72rem] font-bold uppercase tracking-[0.16em] text-gold">
@@ -37,7 +37,16 @@ export function Footer() {
           </div>
         </div>
         <p className="pt-7 text-center text-xs text-ivory/45">
-          &copy; 2026 BillBirD. Premium Optical & Eyewear Brand. All rights reserved.
+          &copy; 2026 BillBirD. Premium Optical & Eyewear Brand. All rights reserved. Made by{" "}
+          <a
+            href="https://fusionventuresglobal.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-gold transition hover:text-ivory"
+          >
+            Fusion Ventures
+          </a>
+          .
         </p>
       </div>
     </footer>

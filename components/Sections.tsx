@@ -1,4 +1,13 @@
-import { ArrowUpRight, Mail, MessageCircle } from "lucide-react";
+import {
+  ArrowUpRight,
+  Globe2,
+  Instagram,
+  Linkedin,
+  Mail,
+  MessageCircle,
+  Phone,
+  Youtube,
+} from "lucide-react";
 import Link from "next/link";
 import { formatAed, products as shopProducts } from "@/data/products";
 import { benefits, brand, collections, philosophy } from "@/data/site";
@@ -316,6 +325,45 @@ export function CraftsmanshipSection() {
 }
 
 export function ContactSection() {
+  const contactCards = [
+    {
+      label: "Phone / WhatsApp",
+      value: brand.phone,
+      href: brand.whatsapp,
+      Icon: Phone,
+    },
+    {
+      label: "Email",
+      value: brand.email,
+      href: `mailto:${brand.email}`,
+      Icon: Mail,
+    },
+    {
+      label: "Website",
+      value: brand.website,
+      href: `https://${brand.website}`,
+      Icon: Globe2,
+    },
+    {
+      label: "Instagram",
+      value: brand.instagram,
+      href: `https://instagram.com/${brand.instagram}`,
+      Icon: Instagram,
+    },
+    {
+      label: "LinkedIn",
+      value: brand.linkedIn,
+      href: "#",
+      Icon: Linkedin,
+    },
+    {
+      label: "YouTube",
+      value: brand.youtube,
+      href: "#",
+      Icon: Youtube,
+    },
+  ];
+
   return (
     <section id="contact" className="relative overflow-hidden bg-ink py-16 text-ivory md:py-24">
       <BrandImage
@@ -324,21 +372,34 @@ export function ContactSection() {
         className="absolute inset-0 h-full opacity-38"
         imageClassName="scale-105"
       />
-      <div className="section-shell relative max-w-4xl text-center">
+      <div className="section-shell relative max-w-5xl text-center">
         <p className="eyebrow mb-4 text-gold">Contact BillBirD</p>
         <h2 className="display-title text-4xl md:text-6xl">Begin your eyewear conversation.</h2>
-        <div className="mx-auto mt-8 grid max-w-2xl gap-3 text-sm text-ivory/78 sm:grid-cols-2">
-          <p>Phone / WhatsApp: {brand.phone}</p>
-          <p>Website: {brand.website}</p>
-          <p>Email: {brand.email}</p>
-          <p>Instagram: {brand.instagram}</p>
-          <p>LinkedIn: {brand.linkedIn}</p>
-          <p>YouTube: {brand.youtube}</p>
+        <div className="mx-auto mt-9 grid max-w-4xl gap-3 text-start sm:grid-cols-2 lg:grid-cols-3">
+          {contactCards.map(({ label, value, href, Icon }) => (
+            <a
+              key={label}
+              href={href}
+              className="group flex min-h-20 items-center gap-4 rounded-[10px] border border-ivory/12 bg-ivory/[0.04] p-4 transition hover:-translate-y-0.5 hover:border-gold/55 hover:bg-ivory/[0.08]"
+            >
+              <span className="grid size-11 shrink-0 place-items-center rounded-full border border-gold/35 bg-gold/10 text-gold">
+                <Icon size={19} />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[0.64rem] font-bold uppercase tracking-[0.16em] text-gold/85">
+                  {label}
+                </span>
+                <span className="mt-1 block truncate text-sm text-ivory/78 group-hover:text-ivory">
+                  {value}
+                </span>
+              </span>
+            </a>
+          ))}
         </div>
         <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
           <a href={brand.whatsapp} className="btn-primary"><MessageCircle size={16} /> WhatsApp Us</a>
           <a href={`mailto:${brand.email}`} className="btn-secondary"><Mail size={16} /> Email Us</a>
-          <a href="#" className="btn-secondary">Visit Instagram</a>
+          <a href={`https://instagram.com/${brand.instagram}`} className="btn-secondary"><Instagram size={16} /> Visit Instagram</a>
         </div>
       </div>
     </section>
