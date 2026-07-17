@@ -270,6 +270,26 @@ export const products: Product[] = [
 
 export const lensPackages: LensPackage[] = [
   {
+    id: "standard",
+    name: "Standard",
+    color: "Clear",
+    price: 0,
+    compatiblePowerTypes: ["without-power", "with-power"],
+    compatibleCategories: ["eyeglasses", "sunglasses"],
+    features: ["Included standard lens", "Comfort daily use", "Quality checked", "BillBirD case included"],
+    details: {
+      description: "Included lens option for customers who want a clean standard setup.",
+      index: "Standard",
+      coating: "Standard finish",
+      uvProtection: "Product dependent",
+      scratchResistance: "Standard",
+      thickness: "Standard profile",
+      recommendedUse: "Daily wear",
+      deliveryImpact: "No additional delay",
+      warranty: "Standard frame warranty",
+    },
+  },
+  {
     id: "brown-power-sun",
     name: "Brown Power Sun",
     color: "Brown",

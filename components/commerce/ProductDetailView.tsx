@@ -23,28 +23,6 @@ export function ProductDetailView({ product }: { product: Product }) {
     [product],
   );
 
-  function addWithoutPower() {
-    addItem({
-      productId: product.id,
-      productSlug: product.slug,
-      productName: product.name,
-      productImage: product.images[imageIndex] ?? product.images[0],
-      frameColor,
-      frameSize: size,
-      quantity: 1,
-      framePrice: product.price,
-      totalPrice: product.price,
-      lensSelection: {
-        powerType: "without-power",
-        lensPackageId: "standard-included",
-        lensPackageName: "Standard Included Lens",
-        lensPrice: 0,
-        prescription: { method: "not-required" },
-      },
-    });
-    setNotice("Added to cart without power.");
-  }
-
   function addWithLens(selection: LensSelection) {
     addItem({
       productId: product.id,
@@ -114,12 +92,9 @@ export function ProductDetailView({ product }: { product: Product }) {
               </div>
             </div>
 
-            <div className="mt-7 grid gap-3 sm:grid-cols-2">
-              <button onClick={addWithoutPower} className="min-h-12 rounded-full border border-ink/20 bg-white px-5 text-sm font-bold uppercase tracking-[0.14em]">
-                Buy Without Power
-              </button>
-              <button onClick={() => setLensOpen(true)} className="min-h-12 rounded-full bg-ink px-5 text-sm font-bold uppercase tracking-[0.14em] text-ivory">
-                Select Lenses
+            <div className="mt-7 grid gap-3">
+              <button onClick={() => setLensOpen(true)} className="min-h-12 rounded-full bg-ink px-5 text-sm font-bold uppercase tracking-[0.14em] text-ivory transition hover:bg-leather">
+                Add to Cart
               </button>
             </div>
             <button className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-ink/15 bg-white text-sm font-bold uppercase tracking-[0.14em]">
@@ -179,7 +154,7 @@ export function ProductDetailView({ product }: { product: Product }) {
             <p className="font-bold">{formatAed(product.price)}</p>
           </div>
           <button onClick={() => setLensOpen(true)} className="min-h-12 rounded-full bg-ink px-5 text-xs font-bold uppercase tracking-[0.14em] text-ivory">
-            Select Lenses
+            Add to Cart
           </button>
         </div>
       </div>

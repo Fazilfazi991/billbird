@@ -11,11 +11,13 @@ function BrandImage({
   src,
   className = "",
   imageClassName = "",
+  fit = "cover",
 }: {
   alt: string;
   src: string;
   className?: string;
   imageClassName?: string;
+  fit?: "cover" | "contain";
 }) {
   return (
     <div className={`relative overflow-hidden bg-bone ${className}`}>
@@ -24,7 +26,7 @@ function BrandImage({
         alt={alt}
         loading="eager"
         decoding="async"
-        className={`absolute inset-0 h-full w-full object-cover transition duration-700 ${imageClassName}`}
+        className={`absolute inset-0 h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} transition duration-700 ${imageClassName}`}
       />
     </div>
   );
@@ -89,8 +91,9 @@ export function CollectionCards() {
               <BrandImage
                 src={featuredProducts[index]?.images[0] ?? imagePath([7, 6, 4][index])}
                 alt={`${featuredProducts[index]?.name ?? item.title} by BillBirD`}
-                className="aspect-[4/5]"
+                className="aspect-[4/5] bg-white"
                 imageClassName="group-hover:scale-105"
+                fit="contain"
               />
               <div className="p-5 md:p-6">
                 <h3 className="font-serif text-2xl md:text-3xl">{item.title}</h3>
@@ -245,8 +248,9 @@ export function ProductGrid() {
                 <BrandImage
                   src={product.images[0]}
                   alt={`${product.name} ${product.frameType}`}
-                  className="aspect-square"
+                  className="aspect-square bg-white"
                   imageClassName="group-hover:scale-105"
+                  fit="contain"
                 />
               </Link>
               <div className="p-4 text-center">
