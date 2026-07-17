@@ -91,7 +91,7 @@ export function CollectionCards() {
               <BrandImage
                 src={featuredProducts[index]?.images[0] ?? imagePath([7, 6, 4][index])}
                 alt={`${featuredProducts[index]?.name ?? item.title} by BillBirD`}
-                className="aspect-[4/5] bg-white"
+                className="aspect-[4/3] bg-white"
                 imageClassName="group-hover:scale-105"
                 fit="contain"
               />
@@ -248,7 +248,7 @@ export function ProductGrid() {
                 <BrandImage
                   src={product.images[0]}
                   alt={`${product.name} ${product.frameType}`}
-                  className="aspect-square bg-white"
+                  className="aspect-[4/3] bg-white"
                   imageClassName="group-hover:scale-105"
                   fit="contain"
                 />

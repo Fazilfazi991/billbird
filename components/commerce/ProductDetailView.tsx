@@ -48,18 +48,18 @@ export function ProductDetailView({ product }: { product: Product }) {
 
         <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(380px,0.92fr)]">
           <div>
-            <div className="overflow-hidden rounded-[12px] bg-bone">
-              <img src={product.images[imageIndex] ?? product.images[0]} alt={product.name} className="aspect-[4/5] w-full object-cover md:aspect-[5/4]" />
+            <div className="overflow-hidden rounded-[12px] bg-white">
+              <img src={product.images[imageIndex] ?? product.images[0]} alt={product.name} className="aspect-square w-full object-contain md:aspect-[4/3]" />
             </div>
             <div className="mt-3 grid grid-cols-4 gap-3">
               {product.images.map((image, index) => (
                 <button
                   key={image}
                   onClick={() => setImageIndex(index)}
-                  className={`overflow-hidden rounded-lg border ${imageIndex === index ? "border-ink" : "border-transparent"}`}
+                  className={`overflow-hidden rounded-lg border bg-white ${imageIndex === index ? "border-ink" : "border-transparent"}`}
                   aria-label={`Show product image ${index + 1}`}
                 >
-                  <img src={image} alt="" className="aspect-square w-full object-cover" />
+                  <img src={image} alt="" className="aspect-square w-full object-contain" />
                 </button>
               ))}
             </div>

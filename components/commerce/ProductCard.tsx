@@ -9,17 +9,17 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="group min-w-0 overflow-hidden rounded-[10px] border border-ink/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-soft">
       <Link href={`/products/${product.slug}`} className="block">
-        <div className="relative aspect-[4/5] overflow-hidden bg-bone">
+        <div className="relative aspect-[4/3] overflow-hidden bg-white">
           <img
             src={product.images[0]}
             alt={product.name}
-            className="h-full w-full object-cover transition duration-500 group-hover:opacity-0"
+            className="h-full w-full object-contain transition duration-500 group-hover:opacity-0"
           />
           <img
             src={product.images[1] ?? product.images[0]}
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover opacity-0 transition duration-500 group-hover:opacity-100"
+            className="absolute inset-0 h-full w-full object-contain opacity-0 transition duration-500 group-hover:opacity-100"
           />
           {product.originalPrice ? (
             <span className="absolute start-2 top-2 rounded-full bg-ink px-2 py-1 text-[0.64rem] font-bold uppercase tracking-[0.12em] text-ivory">
